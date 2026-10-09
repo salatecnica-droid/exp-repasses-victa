@@ -197,6 +197,13 @@ export default async () => {
     if (!linhas.length) linhas = await consultar(esqProj.id, { and: [porTitulo, ...regras] });
     if (!linhas.length) avisos.push("Nenhuma linha encontrada para os clientes de CLIENTES_IDS. Confira os nomes e links.");
 
+    // Coluna de analista: "Analista" ou qualquer coluna com "analista" no nome (relação, pessoa, seleção ou texto)
+    if (!props[COLUNAS.analista]) {
+      // A base de analistas no Notion se chama "Contatos", então a coluna pode ter esse nome
+      const achada = [/analista/i, /contato/i, /respons/i].map((re) => Object.keys(props).find((n) => re.test(n))).find(Boolean);
+      if (achada) COLUNAS.analista = achada;
+      else avisos.push(`Coluna de analista não encontrada. Colunas da base: ${Object.keys(props).join(", ")}`);
+    }
     const ehCoor = (pg) => String(prop(pg, COLUNAS.disciplina) || "").toUpperCase() === "COOR";
     const projetos = new Map();
     for (const pg of linhas.filter(ehCoor)) {
@@ -280,8 +287,12 @@ export default async () => {
       try { const pg = await notion(`/v1/pages/${id}`); nomes.set(id, titulo(pg) || "Analista"); }
       catch { semAcesso++; nomes.set(id, null); }
     }));
-    if (semAcesso) avisos.push(`Sem acesso a ${semAcesso} página(s) de analista. Adicione a conexão à base de analistas no Notion (••• > Conexões).`);
+    if (semAcesso) avisos.push(`Sem acesso a ${semAcesso} página(s) de analista. Adicione a conexão à base Contatos no Notion (••• > Conexões).`);
     const analistas = new Map();
+    const semNinguem = [...projetos.values()].filter((p) => !p.analistaIds.length && !p.analistaTexto).length;
+    if (props[COLUNAS.analista] && semNinguem === projetos.size && projetos.size) {
+      avisos.push(`A coluna "${COLUNAS.analista}" (${props[COLUNAS.analista].type}) está vazia nas linhas COOR dos projetos.`);
+    }
     for (const p of projetos.values()) {
       const nome = p.analistaIds.map((id) => nomes.get(id)).find(Boolean) || p.analistaTexto || (p.analistaIds.length ? "Analista" : "Sem analista");
       const id = slugNome(nome) || "sem-analista";
