@@ -178,10 +178,24 @@ export default async () => {
       const i = x.indexOf("="); return { nome: x.slice(0, i).trim(), id: idDe(x.slice(i + 1)) };
     }).filter((c) => c.nome && c.id);
     if (!clientes.length) throw new Error("Configuração incompleta no Netlify: CLIENTES_IDS (ex.: Victa=link;Diagonal=link)");
-    if (!esqProj.properties[COLUNAS.clientes]) throw new Error(`Coluna "${COLUNAS.clientes}" não encontrada na base`);
-    const porCliente = { or: clientes.map((c) => ({ property: COLUNAS.clientes, relation: { contains: c.id } })) };
-    const linhas = await consultar(esqProj.id, { and: [porCliente, ...regras] });
-    if (!linhas.length) avisos.push("Nenhuma linha encontrada para os clientes de CLIENTES_IDS. Confira os links.");
+    // Coluna de clientes: usa "CLIENTES" se existir; senão procura uma relação com "client" no nome
+    const props = esqProj.properties;
+    if (!props[COLUNAS.clientes]) {
+      const achada = Object.keys(props).find((n) => props[n].type === "relation" && /client/i.test(n));
+      if (achada) COLUNAS.clientes = achada;
+    }
+    const tituloNome = Object.keys(props).find((n) => props[n].type === "title");
+    const porTitulo = { or: clientes.map((c) => ({ property: tituloNome, title: { contains: c.nome } })) };
+    let linhas = [];
+    if (props[COLUNAS.clientes]?.type === "relation") {
+      const porCliente = { or: clientes.map((c) => ({ property: COLUNAS.clientes, relation: { contains: c.id } })) };
+      linhas = await consultar(esqProj.id, { and: [porCliente, ...regras] });
+      if (!linhas.length) avisos.push("Os links de CLIENTES_IDS não encontraram projetos; filtrando pelo nome do cliente no título.");
+    } else {
+      avisos.push(`A base não tem a coluna "${COLUNAS.clientes}": filtrando pelo nome do cliente no título (${clientes.map((c) => c.nome).join(", ")}).`);
+    }
+    if (!linhas.length) linhas = await consultar(esqProj.id, { and: [porTitulo, ...regras] });
+    if (!linhas.length) avisos.push("Nenhuma linha encontrada para os clientes de CLIENTES_IDS. Confira os nomes e links.");
 
     const ehCoor = (pg) => String(prop(pg, COLUNAS.disciplina) || "").toUpperCase() === "COOR";
     const projetos = new Map();
