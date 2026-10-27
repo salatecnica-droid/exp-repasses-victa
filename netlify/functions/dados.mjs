@@ -25,7 +25,7 @@ const COLUNAS = {
 };
 // Mesmas regras de filtro da visualização JSIMÕES no Notion
 const STATUS_EXCLUIDO = "ARQUIVADO";
-const LEGAL_SIGLAS = ["INC", "ELE", "SBE"]; // disciplinas que têm legalização
+const LEGAL_SIGLAS = ["INC", "ELE", "SBE", "INF"]; // disciplinas que têm legalização (INF = Infraestrutura)
 const DISCIPLINA_EXCLUIDA = "CRON";
 const FUSO = "America/Sao_Paulo"; // para calcular "hoje" nas próximas entregas
 // Checklist por etapa: caixas de seleção do projeto com o nome "EP - Arquitetura", "PB - Estrutural"...
@@ -247,7 +247,7 @@ export default async () => {
         status: texto(prop(pg, COLUNAS.statusAtual)),
         entrega: texto(prop(pg, COLUNAS.entrega)),
       });
-      // Mesma base: Incêndio, Elétrico e SBE trazem a legalização na própria linha
+      // Mesma base: Incêndio, Elétrico, SBE e Infraestrutura trazem a legalização na própria linha
       const statusLegal = mesmaBase ? texto(prop(pg, COLUNAS.legalStatus)) : null;
       if (statusLegal && LEGAL_SIGLAS.includes(String(sigla).toUpperCase())) {
         dono.legal.push({ sigla, status: statusLegal, prazo: texto(prop(pg, COLUNAS.legalPrazo)), retorno: texto(prop(pg, COLUNAS.legalRetorno)) });
