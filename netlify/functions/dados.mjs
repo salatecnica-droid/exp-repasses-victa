@@ -22,6 +22,11 @@ const COLUNAS = {
   legalPrazo: "Prazo",
   legalRetorno: "Previsão de retorno",
   legalDisciplina: "Disciplina",
+  // Linha do tempo (Gantt): início e fim de cada projeto/disciplina
+  inicio: "Data de início adotada",
+  fim: "Data de entrega",
+  // (opcional) linha de produto do empreendimento: Vitória, Viver, Vista, Diagonal INC…
+  linha: "Linha de produto",
 };
 // Mesmas regras de filtro da visualização JSIMÕES no Notion
 const STATUS_EXCLUIDO = "ARQUIVADO";
@@ -135,6 +140,18 @@ const titulo = (pg) => {
   const p = Object.values(pg.properties).find((x) => x.type === "title");
   return valor(p) || "";
 };
+// Acha a coluna mesmo com diferença de acento ou maiúscula ("Data de inicio adotada" = "Data de início adotada")
+const semAcento = (t) => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const colunaDe = (props, nome) => (props[nome] ? nome : Object.keys(props).find((n) => semAcento(n) === semAcento(nome)));
+// Período da linha: início pela "Data de início adotada", fim pela "Data de entrega" (ou o fim do próprio intervalo de início)
+function periodo(pg, cIni, cFim) {
+  const ini = cIni ? valor(pg.properties[cIni]) : null;
+  const fimProp = cFim ? valor(pg.properties[cFim]) : null;
+  const fim = fimProp || (cIni && pg.properties[cIni]?.date?.end ? pg.properties[cIni].date.end.slice(0, 10) : null);
+  const a = typeof ini === "string" ? ini : null, b = typeof fim === "string" ? fim : null;
+  if (!a || !b) return null;
+  return a <= b ? { inicio: a, fim: b } : { inicio: b, fim: a };
+}
 const codigoDe = (t) => (String(t).match(/^\s*(\d{4,6})/) || [])[1] || null;
 
 // Lê as caixas de seleção do checklist (marcada = concluída)
@@ -204,6 +221,8 @@ export default async () => {
       if (achada) COLUNAS.analista = achada;
       else avisos.push(`Coluna de analista não encontrada. Colunas da base: ${Object.keys(props).join(", ")}`);
     }
+    const cIni = colunaDe(props, COLUNAS.inicio), cFim = colunaDe(props, COLUNAS.fim), cLinha = colunaDe(props, COLUNAS.linha);
+    if (!cIni || !cFim) avisos.push(`Coluna "${!cIni ? COLUNAS.inicio : COLUNAS.fim}" não encontrada: o cronograma (Gantt) fica sem essas datas.`);
     const ehCoor = (pg) => String(prop(pg, COLUNAS.disciplina) || "").toUpperCase() === "COOR";
     const projetos = new Map();
     for (const pg of linhas.filter(ehCoor)) {
@@ -225,6 +244,8 @@ export default async () => {
         entrega: texto(prop(pg, COLUNAS.entrega)),
         pendencias: lista(prop(pg, COLUNAS.pendencias)),
         requisitos: checklistDe(pg),
+        linha: cLinha ? texto(prop(pg, cLinha)) : null,
+        cronograma: (() => { const per = periodo(pg, cIni, cFim); return per ? [{ etapa: texto(prop(pg, COLUNAS.etapa)), ...per }] : []; })(),
         disciplinas: [],
         legal: [],
       });
@@ -246,6 +267,7 @@ export default async () => {
         etapa: texto(prop(pg, COLUNAS.etapa)),
         status: texto(prop(pg, COLUNAS.statusAtual)),
         entrega: texto(prop(pg, COLUNAS.entrega)),
+        ...(periodo(pg, cIni, cFim) || {}),
       });
       // Mesma base: Incêndio, Elétrico, SBE e Infraestrutura trazem a legalização na própria linha
       const statusLegal = mesmaBase ? texto(prop(pg, COLUNAS.legalStatus)) : null;
