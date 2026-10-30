@@ -142,13 +142,26 @@ const titulo = (pg) => {
 };
 // Acha a coluna mesmo com diferença de acento ou maiúscula ("Data de inicio adotada" = "Data de início adotada")
 const semAcento = (t) => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-const colunaDe = (props, nome) => (props[nome] ? nome : Object.keys(props).find((n) => semAcento(n) === semAcento(nome)));
+const colunaDe = (props, nome, ...alternativas) => {
+  if (props[nome]) return nome;
+  const ks = Object.keys(props), achar = (f) => ks.find((n) => f(semAcento(n)));
+  return achar((n) => n === semAcento(nome)) || alternativas.map((re) => achar((n) => re.test(n))).find(Boolean);
+};
+// Data em qualquer formato que o Notion devolva (data, fórmula, rollup em lista, texto "dd/mm/aaaa") → "aaaa-mm-dd"
+function isoDe(v) {
+  if (Array.isArray(v)) return v.map(isoDe).filter(Boolean).sort()[0] || null;
+  if (v && typeof v === "object" && v.start) return isoDe(v.start);
+  const t = String(v ?? "").trim(); let m;
+  if ((m = t.match(/^(\d{4})-(\d{2})-(\d{2})/))) return `${m[1]}-${m[2]}-${m[3]}`;
+  if ((m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  return null;
+}
 // Período da linha: início pela "Data de início adotada", fim pela "Data de entrega" (ou o fim do próprio intervalo de início)
 function periodo(pg, cIni, cFim) {
   const ini = cIni ? valor(pg.properties[cIni]) : null;
   const fimProp = cFim ? valor(pg.properties[cFim]) : null;
   const fim = fimProp || (cIni && pg.properties[cIni]?.date?.end ? pg.properties[cIni].date.end.slice(0, 10) : null);
-  const a = typeof ini === "string" ? ini : null, b = typeof fim === "string" ? fim : null;
+  const a = isoDe(ini), b = isoDe(fim);
   if (!a || !b) return null;
   return a <= b ? { inicio: a, fim: b } : { inicio: b, fim: a };
 }
@@ -221,8 +234,10 @@ export default async () => {
       if (achada) COLUNAS.analista = achada;
       else avisos.push(`Coluna de analista não encontrada. Colunas da base: ${Object.keys(props).join(", ")}`);
     }
-    const cIni = colunaDe(props, COLUNAS.inicio), cFim = colunaDe(props, COLUNAS.fim), cLinha = colunaDe(props, COLUNAS.linha);
-    if (!cIni || !cFim) avisos.push(`Coluna "${!cIni ? COLUNAS.inicio : COLUNAS.fim}" não encontrada: o cronograma (Gantt) fica sem essas datas.`);
+    const cIni = colunaDe(props, COLUNAS.inicio, /INICIO ADOTAD/i, /DATA DE INICIO/i, /^INICIO/i);
+    const cFim = colunaDe(props, COLUNAS.fim, /^DATA DE ENTREGA/i, /^DATA (DE )?FIM/i, /^ENTREGA/i);
+    const cLinha = colunaDe(props, COLUNAS.linha, /LINHA/i);
+    if (!cIni || !cFim) avisos.push(`Coluna "${!cIni ? COLUNAS.inicio : COLUNAS.fim}" não encontrada: o cronograma (Gantt) fica sem essas datas. Colunas com data na base: ${Object.keys(props).filter((n) => /DATA|INICIO|ENTREGA|PRAZO/i.test(semAcento(n))).join(", ")}`);
     const ehCoor = (pg) => String(prop(pg, COLUNAS.disciplina) || "").toUpperCase() === "COOR";
     const projetos = new Map();
     for (const pg of linhas.filter(ehCoor)) {
@@ -249,6 +264,10 @@ export default async () => {
         disciplinas: [],
         legal: [],
       });
+    }
+    if (cIni && cFim && projetos.size && ![...projetos.values()].some((p) => p.cronograma.length)) {
+      const ex = linhas.find(ehCoor);
+      avisos.push(`Colunas "${cIni}" (${props[cIni].type}) e "${cFim}" (${props[cFim].type}) encontradas, mas nenhum projeto (linha COOR) tem as duas datas preenchidas.${ex ? ` Exemplo "${titulo(ex)}": início=${JSON.stringify(valor(ex.properties[cIni]))}, fim=${JSON.stringify(valor(ex.properties[cFim]))}` : ""}`);
     }
     const porCodigo = new Map([...projetos.values()].map((p) => [p.codigo, p]));
     // Disciplina pertence ao projeto pelo subitem (relação) ou, se não houver, pelo código no título
