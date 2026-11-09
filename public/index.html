@@ -11,21 +11,21 @@
 <style>
 /* Layout: barra lateral escura fixa (marca + navegação) e conteúdo claro em páginas; cores da logo EXP (verde-limão e ciano) */
 :root{
-  --night:#121212; --night-2:#1E1E1B; --night-line:#2E2E2A; --night-ink:#F5F5F0; --night-muted:#9C9C94;
-  --paper:#F3F3EE; --card:#FFFFFF; --ink:#121212; --ink-2:#45453F; --muted:#77776F; --line:#E3E3DB; --line-2:#CFCFC6;
+  --night:#1F1F1F; --night-2:#282826; --night-line:#353532; --night-ink:#F8F6F2; --night-muted:#B9B6AE; /* Grafite e neutros do Brand Guidelines 2026 */
+  --paper:#F8F6F2; --card:#FFFFFF; --ink:#1F1F1F; --ink-2:#5C5A55; --muted:#77756F; --line:#DAD6CC; --line-2:#C9C5BA; /* Off White, texto de apoio e linhas da marca */
   --lime:#DDDB00; --lime-ink:#5E6400; --cyan:#09A1E3; --cyan-ink:#0B78A8; --warn:#E8901C; --warn-bg:#FFF2DE;
-  --ep:#09A1E3; --ap:#B48CF0; --pb:#F2A33A; --ex:#DDDB00; --pl:#E58FB8; --rev:#C9C9C2;
+  --ep:#09A1E3; --ap:#B48CF0; --pb:#F2A33A; --ex:#DDDB00; --pl:#E58FB8; --rev:#C9C9C2; --lo:#3BAA63;
   --font:'Sora',Arial,Helvetica,sans-serif;
   --d-cli:#13A39A; --d-esg:#2E9E4F; --d-hid:#2D6DE3; --d-pis:#1590C8; --d-ele:#E06A00; --d-sbe:#B35300; --d-spda:#6D4FD8; --d-inc:#D62828; --d-elo:#C2187A; --d-fur:#6B6B66; --d-inf:#8A5A2B;
   --vazio:#E9E9E2; --deco:#4A4A45;
-  --soft:#FAFAF7; --soft-2:#F1F1EB; --soft-3:#ECECE5; --grid:#E6E6DE; --chip-on:#121212; --chip-on-ink:#F5F5F0;
+  --soft:#FAFAF7; --soft-2:#F1F1EB; --soft-3:#ECECE5; --grid:#E6E6DE; --chip-on:#1F1F1F; --chip-on-ink:#F5F5F0;
   color-scheme:light;
 }
 /* Tema escuro: o branco vira cinza-escuro, o fundo vira um preto mais claro que a barra lateral */
 :root[data-theme="dark"]{
-  --paper:#1B1B19; --card:#272724; --ink:#F2F2EC; --ink-2:#CDCDC5; --muted:#9A9A92; --line:#363632; --line-2:#4B4B45;
-  --soft:#2D2D2A; --soft-2:#31312D; --soft-3:#3A3A35; --grid:#33332F; --lime-ink:#DDDB00; --cyan-ink:#5CC6F2; --warn-bg:#3A2E1A;
-  --chip-on:#F2F2EC; --chip-on-ink:#121212; --vazio:#3A3A35; --deco:#2F2F2B;
+  --paper:#262624; --card:#2E2E2B; --ink:#F2F2EC; --ink-2:#CDCDC5; --muted:#9A9A92; --line:#3D3D39; --line-2:#52524C;
+  --soft:#343431; --soft-2:#383835; --soft-3:#40403C; --grid:#393935; --lime-ink:#DDDB00; --cyan-ink:#5CC6F2; --warn-bg:#3A2E1A;
+  --chip-on:#F2F2EC; --chip-on-ink:#1F1F1F; --vazio:#40403C; --deco:#363632;
   --d-cli:#2CC7BB; --d-esg:#45C26C; --d-hid:#5B8FF2; --d-pis:#3FB0E6; --d-ele:#FF8A2B; --d-sbe:#E0893D; --d-spda:#9A82F5; --d-inc:#F05454; --d-elo:#EC5FB0; --d-fur:#C2C2B8; --d-inf:#D9A066;
   color-scheme:dark;
 }
@@ -38,10 +38,12 @@
 .quem{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:18px 28px;align-items:center;padding:22px 24px;background:linear-gradient(90deg,rgba(221,219,0,.22),rgba(221,219,0,0) 70%),var(--card)}
 .quem p{font-size:13.5px;color:var(--ink-2);margin-top:6px;line-height:1.5}
 .quem-op{display:flex;flex-wrap:wrap;gap:8px}
-.quem-op button{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.quem-op button{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 .quem-op button .fold{width:16px;height:16px;color:#B8BF12}
-.quem-op button:hover{border-color:var(--ink)}
+@media (hover:hover){.quem-op button:not([aria-pressed="true"]):hover{border-color:var(--ink)}} /* no toque, sem contorno "preso" de hover */
 .quem-op button.todos{border-style:dashed;color:var(--ink-2)}
+.quem-op button[aria-pressed="true"]{border:2px solid var(--cyan);padding:7px 13px;box-shadow:0 0 0 3px color-mix(in srgb,var(--cyan) 18%,transparent)} /* escolhido: contorno azul */
+.quem-op button.todos[aria-pressed="true"]{border-style:solid;color:var(--ink)}
 .mini-e.atr .md b,.mini-e.atr .md small{color:#D9731A}
 .mini-e .mn small i{font-style:normal;color:var(--muted)}
 @container (max-width:900px){ .quem{grid-template-columns:1fr} }
@@ -65,22 +67,22 @@
 .st-s li{display:grid;grid-template-columns:118px minmax(0,1fr);align-items:center;gap:12px;font-size:13px;color:var(--ink-2)}
 .st-s li .pill{width:100%}
 /* Assistente */
-#assist{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px}
-.as-btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:11px 18px 11px 14px;font:inherit;font-size:13.5px;font-weight:700;color:#121212;background:linear-gradient(90deg,#DDDB00,#E6EB8F);box-shadow:0 8px 24px rgba(0,0,0,.22);cursor:pointer}
+#assist{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px}
+.as-btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:11px 18px 11px 14px;font:inherit;font-size:13.5px;font-weight:700;color:#1F1F1F;background:linear-gradient(90deg,#DDDB00,#E6EB8F);box-shadow:0 8px 24px rgba(0,0,0,.22);cursor:pointer}
 .as-btn svg{width:18px;height:18px}
-.as-painel{width:min(380px,calc(100vw - 36px));max-height:min(560px,calc(100dvh - 110px));display:flex;flex-direction:column;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 48px rgba(0,0,0,.25);overflow:hidden}
+.as-painel{width:min(380px,calc(100vw - 36px));max-height:min(560px,calc(100dvh - 110px));display:flex;flex-direction:column;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 48px rgba(0,0,0,.25);overflow:hidden}
 .as-painel[hidden]{display:none}
 .as-painel header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--night);color:var(--night-ink)}
 .as-painel header div{flex:1}
 .as-painel header b{display:block;font-size:14px}
 .as-painel header small{display:block;font-size:11.5px;color:var(--night-muted)}
-.as-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#DDDB00;color:#121212}
+.as-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#DDDB00;color:#1F1F1F}
 .as-ico svg{width:17px;height:17px}
 .as-x{border:0;background:none;color:var(--night-ink);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px}
 .as-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.5}
 .as-m{max-width:92%;padding:9px 12px;border-radius:12px}
 .as-m.bot{background:var(--soft-2);align-self:flex-start;border-bottom-left-radius:4px}
-.as-m.eu{background:#09A1E3;color:#121212;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.as-m.eu{background:#09A1E3;color:#1F1F1F;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
 .as-m a{color:var(--cyan-ink);font-weight:700}
 .as-ops{display:flex;flex-wrap:wrap;gap:6px;align-self:stretch}
 .as-ops button{border:1px solid var(--line-2);background:linear-gradient(90deg,rgba(221,219,0,.18),rgba(221,219,0,0) 80%),var(--card);border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;text-align:left}
@@ -90,7 +92,7 @@
 .as-sug button:hover{border-color:var(--ink);color:var(--ink)}
 .as-form{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
 .as-form input{flex:1;min-width:0;font:inherit;font-size:13.5px;border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;background:var(--soft);color:var(--ink)}
-.as-form button{border:0;border-radius:10px;width:40px;background:#121212;color:#DDDB00;cursor:pointer;display:grid;place-items:center}
+.as-form button{border:0;border-radius:10px;width:40px;background:#1F1F1F;color:#DDDB00;cursor:pointer;display:grid;place-items:center}
 @container (max-width:900px){ .duas-i3,.fluxo-s{grid-template-columns:1fr} }
 
 html{scrollbar-color:#DDDB00 #1E1E1E}
@@ -105,7 +107,7 @@ html::-webkit-scrollbar-thumb{background:#DDDB00;border-radius:8px;border:2px so
 .main > .content{position:relative;z-index:1}
 .deco-x{position:absolute;right:0;z-index:0;pointer-events:none;background:var(--deco);-webkit-mask:url(x-deco.png) 0 0/auto 100% no-repeat;mask:url(x-deco.png) 0 0/auto 100% no-repeat}
 @media (max-width:960px){.deco-x{display:none}}
-:root[data-theme="dark"] .pill.cor,:root[data-theme="dark"] .gh-s .sg,:root[data-theme="dark"] .gp-b .sg{color:#121212!important}
+:root[data-theme="dark"] .pill.cor,:root[data-theme="dark"] .gh-s .sg,:root[data-theme="dark"] .gp-b .sg{color:#1F1F1F!important}
 :root[data-theme="dark"] .so-claro{display:none!important}
 :root[data-theme="dark"] .so-escuro{display:block!important}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -162,17 +164,17 @@ a{color:inherit}
 .scrim{display:none}
 
 /* ---------- Peças comuns ---------- */
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px} /* cantos de 16 px (marca) */
 .sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
 h2.t{font-size:22px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
-.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-ink)}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan-ink)} /* rótulo: SemiBold, caixa alta, espaçado */
 .pill{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border-radius:999px;font-size:12.5px;font-weight:600;padding:3px 12px;line-height:1.35}
 .pill.o{border:1.5px solid var(--line-2);color:var(--ink-2);padding:1.5px 10.5px}
-.etq{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:11.5px;font-weight:700;padding:2px 0;width:44px;color:#121212}
+.etq{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:11.5px;font-weight:700;padding:2px 0;width:44px;color:#1F1F1F}
 .dash{color:var(--muted)}
 
 /* ---------- Visão geral ---------- */
-.hero{position:relative;overflow:hidden;border-radius:22px;background:var(--cyan) url(hero.jpg) center/cover;color:var(--ink);padding:44px 44px 40px;padding-right:max(44px,40%);display:flex;flex-direction:column;align-items:flex-start;gap:22px;min-height:300px}
+.hero{position:relative;overflow:hidden;border-radius:16px;background:var(--cyan) url(hero.jpg) center/cover;color:var(--ink);padding:44px 44px 40px;padding-right:max(44px,40%);display:flex;flex-direction:column;align-items:flex-start;gap:22px;min-height:300px}
 .hero > *{position:relative;z-index:1}
 .hero .x{position:absolute;z-index:0;right:-4%;top:50%;transform:translateY(-50%);height:150%;width:auto;max-width:none;pointer-events:none}
 .hero .eyebrow{color:var(--ink)}
@@ -240,7 +242,7 @@ a.linha:hover .chev{color:var(--ink)}
   .legenda .lt{text-align:left}
   .hero{padding:28px 24px 26px;min-height:0}
   .hero .x{right:-38%;height:120%;top:-10%;transform:none;opacity:.55}
-  .stamp{border-radius:14px}
+  .stamp{border-radius:16px}
 }
 
 /* ---------- Projeto ---------- */
@@ -252,7 +254,7 @@ a.linha:hover .chev{color:var(--ink)}
 .cabeca h1 .sep{margin:0 .22em}
 .meta{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13.5px;color:var(--ink-2)}
 .meta span{display:flex;align-items:center;gap:8px}
-.fluxo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:20px 24px}
+.fluxo{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:0;padding:20px 24px}
 .passo{position:relative;display:flex;flex-direction:column;gap:10px;padding-right:12px}
 .passo .bola{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;border:2px solid var(--line-2);background:var(--card);color:var(--muted);position:relative;z-index:1}
 .passo::after{content:"";position:absolute;left:30px;right:0;top:14px;height:2px;background:var(--line)}
@@ -262,7 +264,7 @@ a.linha:hover .chev{color:var(--ink)}
 .passo.feito .bola{background:var(--ink);border-color:var(--ink);color:var(--card)}
 .passo.feito::after{background:var(--ink)}
 .passo.feito b{color:var(--ink-2)}
-.passo.atual .bola{background:var(--lime);border-color:var(--lime);color:#121212;box-shadow:0 0 0 5px rgba(221,219,0,.28)}
+.passo.atual .bola{background:var(--lime);border-color:var(--lime);color:#1F1F1F;box-shadow:0 0 0 5px rgba(221,219,0,.28)}
 .passo.atual b{color:var(--ink)}
 .passo.atual small{color:var(--lime-ink)}
 .duas{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:20px;align-items:start}
@@ -298,7 +300,7 @@ a.linha:hover .chev{color:var(--ink)}
 .grupo.alvo{background:linear-gradient(90deg,rgba(221,219,0,.10),transparent 60%);border-radius:12px;border-top-color:transparent}
 .grupo.alvo + .grupo{border-top-color:transparent}
 .grupo .gh{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-.grupo .gh .sig{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;border-radius:999px;padding:3px 12px;background:var(--c);color:#121212}
+.grupo .gh .sig{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;border-radius:999px;padding:3px 12px;background:var(--c);color:#1F1F1F}
 .grupo .gh b{font-size:14px;font-weight:700}
 .grupo .gh small{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--lime-ink)}
 .lista{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;align-content:start}
@@ -310,7 +312,7 @@ a.linha:hover .chev{color:var(--ink)}
 .liberado{display:flex;align-items:center;gap:12px;background:var(--night);color:var(--night-ink);border-radius:12px;padding:12px 16px;font-weight:600;font-size:14px;margin-top:8px}
 @container (max-width:760px){.grupo{grid-template-columns:1fr;gap:10px}.grupo .gh{flex-direction:row;flex-wrap:wrap;align-items:center}.lista{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}.lista li.p em{display:none}}
 .pager{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pager a{display:flex;flex-direction:column;gap:2px;padding:14px 18px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-decoration:none}
+.pager a{display:flex;flex-direction:column;gap:2px;padding:14px 18px;border-radius:16px;border:1px solid var(--line);background:var(--card);text-decoration:none}
 .pager a:hover{border-color:var(--ink)}
 .pager a small{font-size:11.5px;color:var(--muted);font-weight:600}
 .pager a b{font-size:14.5px}
@@ -334,10 +336,12 @@ a.linha:hover .chev{color:var(--ink)}
 .sobre .arte img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:var(--pos,right bottom)}
 .sobre .arte img.fundo{-webkit-mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.85) 30%,rgba(0,0,0,.35) 62%,transparent 92%);mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.85) 30%,rgba(0,0,0,.35) 62%,transparent 92%)}
 .sobre .arte img.predio{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent 99%);mask-image:linear-gradient(90deg,#000 82%,transparent 99%)}
+.sobre .arte.trel img{inset:auto;left:-18%;top:50%;transform:translateY(-50%);height:118%;width:auto;object-fit:initial}
+@media (max-width:960px){.sobre .arte.trel img{left:50%;transform:translate(-50%,-50%);height:150%}}
 .sobre .txt{display:flex;flex-direction:column;justify-content:center;gap:28px;padding:48px 64px 48px 40px}
 .sobre .missao{position:relative;padding-left:28px;display:flex;flex-direction:column;gap:16px}
 .sobre .missao::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:2px;background:linear-gradient(180deg,var(--cyan),rgba(9,161,227,0))}
-.sobre h1{font-size:34px;font-weight:800}
+.sobre h1{font-size:34px;font-weight:800;text-transform:uppercase}
 .sobre .missao p{font-size:21px;font-weight:700;line-height:1.4;max-width:28ch}
 .sobre .logo{width:min(320px,100%);height:auto}
 .sobre .site{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:15px;text-decoration:none;border-bottom:2px solid var(--lime);padding-bottom:2px;align-self:flex-start}
@@ -423,11 +427,11 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .nav .abas{gap:4px;padding:2px 0 4px}
 .nav a.aba{padding:11px 14px;border-radius:12px;font-size:14px;font-weight:700;gap:12px}
 .nav a.aba .ico{width:19px;height:19px;color:var(--night-ink)}
-.nav a.aba{border-radius:12px 0 0 12px}
-.nav a.aba[aria-current="page"]{background:linear-gradient(90deg,#DDDB00 0%,#DDDB00 22%,rgba(221,219,0,.55) 52%,rgba(221,219,0,.12) 78%,rgba(221,219,0,0) 94%);color:#121212}
-.nav a.aba[aria-current="page"]:hover{background:linear-gradient(90deg,#DDDB00 0%,#DDDB00 22%,rgba(221,219,0,.55) 52%,rgba(221,219,0,.12) 78%,rgba(221,219,0,0) 94%)}
-.subabas a.aba[aria-current="page"]{background:linear-gradient(90deg,#DDDB00 0%,#DDDB00 42%,rgba(221,219,0,.55) 64%,rgba(221,219,0,.14) 80%,rgba(221,219,0,0) 90%);border-radius:12px 0 0 12px;color:#121212;border-color:transparent;box-shadow:none}
-.nav a.aba[aria-current="page"] .ico,.subabas a.aba[aria-current="page"] .ico{color:#121212}
+.nav a.aba{border-radius:12px} /* aba ativa como no celular: botão inteiro, amarelo com degradê claro */
+.nav a.aba[aria-current="page"]{background:linear-gradient(90deg,#DDDB00,#E6EB8F);color:#1F1F1F}
+.nav a.aba[aria-current="page"]:hover{background:linear-gradient(90deg,#DDDB00,#E6EB8F)}
+.subabas a.aba[aria-current="page"]{background:linear-gradient(90deg,#DDDB00,#E6EB8F);border-radius:12px;color:#1F1F1F;border-color:transparent;box-shadow:none}
+.nav a.aba[aria-current="page"] .ico,.subabas a.aba[aria-current="page"] .ico{color:#1F1F1F}
 .nav a.aba[aria-current="page"]::before{display:none}
 .nav .sep-abas{height:1px;background:var(--night-line);margin:10px 12px 0}
 .ico-x{display:inline-block;flex:none;background:currentColor;-webkit-mask:url(ico-x.png) center/contain no-repeat;mask:url(ico-x.png) center/contain no-repeat}
@@ -444,7 +448,7 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .subabas a.aba:hover{border-color:var(--line-2)}
 .subabas a.aba[aria-current="page"]{border-color:transparent}
 .cab-min{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:6px 0 4px}
-.cab-min h1{font-size:clamp(34px,5.2cqi,52px);font-weight:800;line-height:1.02;letter-spacing:-.02em;margin-top:4px}
+.cab-min h1{font-size:clamp(34px,5.2cqi,52px);font-weight:800;line-height:1.02;letter-spacing:-.02em;margin-top:4px;text-transform:uppercase}
 .cab-min .sub{font-size:clamp(17px,2cqi,21px);font-weight:500;color:var(--ink-2)}
 .cab-min .sub b,.boas .lead b{color:var(--cyan-ink)}
 .cab-min .stamp{margin-top:10px}
@@ -458,13 +462,18 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .boas .par .lg-exp{height:64px;width:auto}
 .boas .lg-cli{display:flex;flex-direction:column;justify-content:space-between;height:64px;width:calc(56px * 480 / 199)} /* as duas logos empilhadas ocupam exatamente a altura da logo da EXP */
 .boas .lg-cli img{width:100%;height:auto;display:block}
+.lg-ini{display:grid;grid-template-columns:160px 110px minmax(0,1fr);align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.lg-ini:first-of-type{border-top:0}
+.lg-ini b{font-size:15px}.lg-ini-n{font-size:13px;color:var(--muted)}
+.lg-ini-s{display:flex;flex-wrap:wrap;gap:10px 18px}.lg-ini-s span{display:inline-flex;align-items:center;gap:8px}.lg-ini-s .num{font-size:15px}
+@media (max-width:700px){.lg-ini{grid-template-columns:1fr 1fr}.lg-ini-s{grid-column:1/-1}}
 .boas .lg-cli.um{display:block;width:auto;height:60px}.boas .lg-cli.um img{width:auto;height:100%}
 .boas .lead b.seu{color:var(--cyan-ink);font-weight:800}
 .boas .vezes{font-size:30px;font-weight:300;color:var(--muted)}
 .boas .cli-n{font-size:26px;font-weight:800;letter-spacing:-.01em}
 .boas .cli-n i{font-style:normal;color:var(--cyan);margin:0 .3em}
-.boas h1{font-size:clamp(38px,6cqi,64px);font-weight:800;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
-.boas h1 span{background:linear-gradient(90deg,#DDDB00,#DDDB00) 0 92%/100% .22em no-repeat}
+.boas h1{font-size:clamp(38px,6cqi,64px);font-weight:800;line-height:1.02;letter-spacing:-.025em;text-wrap:balance;text-transform:uppercase}
+.boas h1 span{background:linear-gradient(90deg,#09A1E3,#09A1E3) 0 92%/100% .22em no-repeat} /* destaque com grifo azul turquesa */
 .boas .lead{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:62ch}
 .kpis4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi-b{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden}
@@ -476,8 +485,8 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .atalhos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .atalho{display:flex;align-items:center;gap:14px;padding:18px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:inherit;transition:border-color .15s}
 .atalho:hover{border-color:var(--ink)}
-.atalho .ai{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#DDDB00,#E9EE8C);flex:none}
-.atalho .ai .ico{width:22px;height:22px;color:#121212}
+.atalho .ai{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#1F1F1F;flex:none} /* ícone amarelo em quadrado grafite */
+.atalho .ai .ico{width:22px;height:22px;color:#DDDB00}
 .atalho .at{flex:1;min-width:0}
 .atalho .at b{display:block;font-size:15.5px}
 .atalho .at small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
@@ -509,7 +518,7 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .gn-hoje:hover{border-color:var(--ink)}
 .gn-sel,.gn-chk{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
 .gn-sel select{font:inherit;font-weight:700;color:var(--ink);border:1px solid var(--line-2);border-radius:8px;padding:5px 8px;background:var(--card)}
-.gn-chk input{width:15px;height:15px;accent-color:#121212}
+.gn-chk input{width:15px;height:15px;accent-color:#1F1F1F}
 .gn-leg{margin-left:auto;justify-content:flex-end}
 .gn-leg i{border-radius:3px!important}
 .lg-atual{background:linear-gradient(90deg,#E4E24A,#F2F1B0)}
@@ -531,9 +540,9 @@ a.gh-l:hover .gh-r b{color:var(--ink);text-decoration:underline;text-decoration-
 .gn-b.atrasada{background:#E9A49D;box-shadow:inset 3px 0 0 #C2453B}
 .gn-txt{position:absolute;top:5px;height:24px;display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;color:var(--ink-2);pointer-events:none}
 .gn-txt b{font-weight:700;color:var(--ink)}
-.gn-txt em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:5px;padding:1px 6px;line-height:15px;color:#121212;background:var(--c)}
+.gn-txt em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:5px;padding:1px 6px;line-height:15px;color:#1F1F1F;background:var(--c)}
 .gn-txt span{font-weight:600;font-variant-numeric:tabular-nums}
-.gn-txt.atual,.gn-txt.atual b,.gn-txt.feita,.gn-txt.feita b,.gn-txt.atrasada,.gn-txt.atrasada b{color:#121212}
+.gn-txt.atual,.gn-txt.atual b,.gn-txt.feita,.gn-txt.feita b,.gn-txt.atrasada,.gn-txt.atrasada b{color:#1F1F1F}
 .gn-txt.atual em,.gn-txt.feita em,.gn-txt.atrasada em{box-shadow:0 0 0 1.5px rgba(255,255,255,.7)}
 .gn-txt.atrasada span{color:#8E1F17;font-weight:800}
 .gn-txt.fora,.gn-txt.fora b{color:var(--ink)}
@@ -568,7 +577,7 @@ a.gn-row:hover .gn-txt b{text-decoration:underline;text-decoration-color:var(--c
 .nav .cont{font-style:normal;font-size:10.5px;font-weight:700;color:var(--night-muted);flex:none}
 .cli{display:inline-flex;align-items:center;border-radius:6px;font-size:11px;font-weight:700;padding:1px 7px;border:1.5px solid var(--line-2);color:var(--ink-2);white-space:nowrap}
 .cli.alt{border-color:var(--cyan);color:var(--cyan-ink)}
-.demo{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:#FFF2DE;border:1px solid #F2C27A;color:#5C3A00;border-radius:14px;padding:10px 16px;font-size:13px}
+.demo{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:#FFF2DE;border:1px solid #F2C27A;color:#5C3A00;border-radius:16px;padding:10px 16px;font-size:13px}
 .demo label{display:flex;align-items:center;gap:8px;font-weight:600;margin-left:auto}
 .demo select{font:inherit;font-weight:600;border:1px solid #E0B46A;border-radius:8px;padding:5px 8px;background:#FFFFFF;color:var(--ink)}
 .lista-ent{display:flex;flex-direction:column}
@@ -593,21 +602,208 @@ a.gn-row:hover .gn-txt b{text-decoration:underline;text-decoration-color:var(--c
 
 /* ---------- Celular ---------- */
 @media (max-width:960px){
-  .abas-m{display:flex;gap:6px;padding:8px 12px;background:var(--night);position:sticky;top:58px;z-index:19;overflow-x:auto;scrollbar-width:none}
+  .abas-m{display:flex;gap:6px;padding:8px 12px;background:var(--night);position:sticky;top:72px;z-index:19;overflow-x:auto;scrollbar-width:none}
   .abas-m a{display:flex;align-items:center;gap:7px;flex:1;justify-content:center;padding:8px 10px;border-radius:10px;color:var(--night-ink);text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap}
   .abas-m a .ico{width:16px;height:16px}
-  .abas-m a[aria-current="page"]{background:linear-gradient(90deg,#DDDB00 0%,#DDDB00 30%,rgba(221,219,0,.5) 60%,rgba(221,219,0,0) 96%);color:#121212}
+  .abas-m a[aria-current="page"]{background:linear-gradient(90deg,#DDDB00,#E6EB8F);color:#1F1F1F}
   .app{grid-template-columns:1fr}
   .side{position:fixed;inset:0 auto 0 0;width:min(320px,86vw);z-index:30;transform:translateX(-102%);transition:transform .25s ease;padding-top:env(safe-area-inset-top,0px)}
   .app.aberto .side{transform:none}
   .app.aberto .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:25}
-  .mtop{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:12px;background:var(--night);color:var(--night-ink);padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
-  .mtop img{height:40px;width:auto}
+  .mtop{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:12px;background:var(--night);color:var(--night-ink);padding:8px 16px;padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .mtop img{width:124px;height:auto} /* largura mínima da logo em telas: 120 px */
   .mtop span{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--night-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
   .mtop button{width:38px;height:38px;border-radius:10px;border:1px solid var(--night-line);background:var(--night-2);display:grid;place-items:center;cursor:pointer;flex:none}
   .content{padding-inline:16px;padding-block:20px 48px;gap:20px}
 }
 @media (prefers-reduced-motion:reduce){.side{transition:none}}
+/* ====== v3: Coordenação × Legalização ====== */
+.linha.lgl{grid-template-columns:minmax(170px,1.8fr) 64px 124px 112px 120px 104px 84px 16px}
+.linha.lgl .rt{display:flex;flex-direction:column;align-items:center;line-height:1.25}
+.linha.lgl .rt small{font-size:11.5px;color:var(--muted);font-weight:600}
+.linha.lgl .rt small.atr{color:#D9731A}
+.nota.ponte{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--soft);border:1px solid var(--line);align-self:flex-start;margin-top:-12px}
+.nota.ponte .ico{width:18px;height:18px;color:var(--cyan-ink);flex:none}
+.nota.ponte a{color:var(--cyan-ink);font-weight:700}
+.rs-duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card.rs{display:flex;flex-direction:column;gap:16px;padding:22px 24px;text-decoration:none;color:inherit;transition:border-color .15s}
+.card.rs:hover{border-color:var(--ink)}
+.rs-h{display:flex;align-items:center;gap:14px}
+.rs-h .ai{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#1F1F1F;flex:none}
+.rs-h .ai .ico{width:22px;height:22px;color:#DDDB00}
+.rs-n{margin-left:auto;font-size:40px;font-weight:800;line-height:1}
+.rs-d{font-size:13px;color:var(--ink-2);line-height:1.45}
+.rs-et,.rs-st{display:flex;flex-wrap:wrap;gap:8px 18px}
+.rs-et>span,.rs-st>span{display:inline-flex;align-items:center;gap:8px}
+.rs-et>span.z{opacity:.4}
+.rs-et b,.rs-st b{font-size:15px}
+.rs-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rs-bar .b{flex:1 1 140px;height:10px;border-radius:999px;overflow:hidden;display:flex;background:var(--soft-3)}
+.rs-bar small{font-size:12.5px;color:var(--ink-2)}
+.rs-ver{margin-top:auto;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--cyan-ink)}
+.card.rs:hover .rs-ver{text-decoration:underline;text-underline-offset:3px}
+.atalhos.dois{grid-template-columns:repeat(2,minmax(0,1fr))}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--card);border:1px solid var(--line);align-self:flex-start;margin-top:-8px}
+.seg a{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;font-size:13.5px;font-weight:700;color:var(--ink-2);text-decoration:none}
+.seg a .ico{width:16px;height:16px}
+.seg a:hover{color:var(--ink)}
+.seg a[aria-current="page"]{background:var(--night);color:var(--night-ink)}
+.seg a small{font-size:12px;font-weight:600;opacity:.7}
+.duas-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.duas.lg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.como-t{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:8px}
+.como-n{font-size:12.5px;color:var(--ink-2)}
+.nav h3 .h3a{color:inherit;text-decoration:none}
+.nav h3 .h3a:hover{color:var(--night-ink)}
+@container (max-width:760px){ .linha.lgl{grid-template-columns:1fr 1fr} .linha.lgl .rt{align-items:flex-start} }
+@container (max-width:900px){ .rs-duas,.duas-g,.duas.lg,.atalhos.dois{grid-template-columns:1fr} }
+/* Sobre com foto da equipe: o fundo esmaece para a direita e as pessoas recortadas ficam por cima, sem fade */
+.sobre:has(.arte.equipe){grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.sobre .arte.equipe img.predio{-webkit-mask-image:linear-gradient(90deg,#000 76%,transparent 99%);mask-image:linear-gradient(90deg,#000 76%,transparent 99%)}
+.sobre .numeros{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.sobre .numeros div{display:flex;flex-direction:column;gap:2px;padding:12px 0;border-top:1px solid var(--line)}
+.sobre .numeros b{font-size:24px;font-weight:800;color:var(--cyan);line-height:1.15} /* números em azul turquesa no claro, amarelo no escuro */
+:root[data-theme="dark"] .sobre .numeros b{color:var(--lime)}
+.sobre .numeros span{font-size:12.5px;color:var(--muted)}
+.etapa-t.lg b{margin-top:2px}
+@container (max-width:760px){ .sobre:has(.arte.equipe){grid-template-columns:1fr} .sobre .arte.equipe{height:300px} }
+/* ====== v3 parte 1b ====== */
+.view{counter-reset:rot}
+.sec-h .eyebrow::before,.bloco > header .eyebrow::before,.rs-h .eyebrow::before{counter-increment:rot;content:counter(rot,decimal-leading-zero) " / "} /* rótulos numerados: 01 / Tema */
+:root[data-theme="dark"] .atalho .ai,:root[data-theme="dark"] .rs-h .ai{background:#1F1F1F;box-shadow:inset 0 0 0 1px var(--line-2)}
+.como-g{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px 36px}
+.como-c{display:flex;flex-direction:column;gap:10px}
+.como-c .como-t:first-child{padding-top:0}
+.legp-t{font-size:15px;color:var(--ink-2)}
+.legp-d{display:flex;flex-wrap:wrap;gap:16px 40px}
+.legp-d dt{font-size:12px;color:var(--muted)}
+.legp-d dd{font-size:20px;font-weight:800}
+.legp-d dd small{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:6px}
+.legp-d dd small.atr{color:#D9731A}
+@container (max-width:900px){ .como-g{grid-template-columns:1fr} }
+@media (max-width:960px){
+  .nav a.aba[aria-current="page"],.nav a.aba[aria-current="page"]:hover{background:linear-gradient(90deg,#DDDB00,#E6EB8F)}
+  .abas-m a:not([aria-current="page"]){flex:0 0 auto;padding:8px 12px}
+  .abas-m a:not([aria-current="page"]) span{display:none} /* abas inativas só com o ícone */
+  .abas-m a[aria-current="page"]{flex:1 1 auto}
+  .as-btn{width:52px;height:52px;padding:0;justify-content:center} /* Expertinho só com o símbolo */
+  .as-btn span{display:none}
+  .as-btn svg{width:22px;height:22px}
+}
+/* Celular: letras um pouco menores e menos elementos */
+@media (max-width:700px){
+  body{font-size:14px}
+  .content{gap:18px}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em}
+  h2.t{font-size:18px}
+  .cab-min h1{font-size:30px}
+  .cab-min .sub{display:none}
+  .stamp.claro{font-size:11.5px;padding:6px 12px}
+  .boas h1{font-size:32px}
+  .boas .lead{font-size:14.5px}
+  .boas .par{gap:14px;margin-bottom:10px}
+  .boas .par .lg-exp{height:54px}
+  .boas .lg-cli.um{height:44px}
+  .cabeca h1{font-size:26px}
+  .kpi-b{padding:14px 16px}
+  .kpi-b b{font-size:26px}
+  .kpi-b span{font-size:12.5px}
+  .kpi-b small{font-size:11px}
+  .etapa-t{padding:12px 14px;gap:6px}
+  .etapa-t b{font-size:24px}
+  .etapa-t span{font-size:12px}
+  .bloco,.card.rs{padding:18px 16px}
+  .rs-n{font-size:32px}
+  .rs-d{font-size:12.5px}
+  .pj b{font-size:14px}
+  .pill{font-size:11.5px;padding:2px 10px}
+  .etq{font-size:10.5px;width:40px}
+  .mini-e .md b{font-size:14px}
+  .mini-e .mn b{font-size:13px}
+  .atalho{padding:14px}
+  .atalho .at b{font-size:14.5px}
+  .atalho .at small{font-size:12px}
+  .lista li{font-size:12.5px;padding:8px 10px}
+  .grupo .gh b{font-size:13px}
+  .passo b{font-size:12.5px}
+  .fluxo-s small{display:none}
+  .st-s li{font-size:12.5px;grid-template-columns:104px minmax(0,1fr)}
+  .nota.ponte{font-size:12.5px;margin-top:-6px}
+  .etapas.lgt{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .linha.lgl{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 12px;padding:14px 0}
+  .linha.lgl .pj{grid-column:1/-1}
+  .linha.lgl .cel:has(> .dash){display:none} /* no celular, some o que está vazio */
+  .linha.lgl .cel{align-items:flex-start;text-align:left}
+  .linha.lgl .rt{justify-self:start}
+  .linha.lgl .rt{flex-direction:row;gap:6px;align-items:baseline;justify-self:end}
+  .linha.lgl .rt b{font-size:13px}
+  .linha.lgl.cab{display:none}
+  .legp-d dd{font-size:18px}
+}
+/* nomes de projeto sempre em caixa alta */
+.pj b,.cabeca h1,.mini-e .mn b,.ei .pjn b,.pager b,.nav .pn,.gh-r b,.rs-bar small b{text-transform:uppercase}
+.legp-d dd{display:flex;align-items:center;gap:8px;min-height:28px}
+.legp-n{font-size:14px;font-weight:700}
+/* cartão de Legalização do projeto: texto à esquerda, etapa/status/retorno à direita */
+.bloco.legp{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:40px;row-gap:12px;align-items:center}
+.bloco.legp > header{grid-column:1;grid-row:1}
+.bloco.legp > .legp-t{grid-column:1;grid-row:2}
+.bloco.legp > .legp-d{grid-column:2;grid-row:1 / span 2;align-self:center;justify-content:flex-end}
+@container (max-width:760px){ .bloco.legp{grid-template-columns:1fr} .bloco.legp > .legp-d{grid-column:1;grid-row:3;justify-content:flex-start} }
+/* v4: processo legal atual */
+.nprot{display:inline-grid;place-items:center;min-width:28px;height:24px;padding:0 8px;border-radius:999px;border:1px solid var(--line-2);font-size:12.5px;font-weight:700}
+.bloco.legp{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}
+.bloco.legp > .legp-d{grid-row:1;justify-content:flex-end}
+.bloco.legp > .legp-g{grid-column:2;grid-row:2 / span 2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;padding:16px 18px;border-radius:12px;background:var(--soft)}
+.legp-g dt{font-size:12px;color:var(--muted)}
+.legp-g dd{font-size:17px;font-weight:800;margin-top:2px}
+.legp-g dd small{font-size:12px;font-weight:600;color:var(--muted);margin-left:4px}
+.legp-g dd small.atr{color:#D9731A}
+.bloco.legp > .legp-c{grid-column:1;grid-row:3;align-self:end}
+.btn-comp{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:999px;border:0;cursor:pointer;background:linear-gradient(90deg,#DDDB00,#E6EB8F);color:#1F1F1F}
+.btn-comp .ico{width:17px;height:17px}
+@container (max-width:900px){ .bloco.legp{grid-template-columns:1fr} .bloco.legp > *{grid-column:1 !important;grid-row:auto !important} .bloco.legp > .legp-d{justify-content:flex-start} }
+@media (max-width:700px){ .legp-g{grid-template-columns:1fr 1fr} .legp-g dd{font-size:15px} }
+/* Como acompanhar: as etapas ocupam a mesma altura das legendas */
+.como-g{align-items:stretch}
+.como-g > .como-c:first-child .fluxo-s{flex:1;grid-auto-rows:1fr}
+.como-g > .como-c:first-child .fluxo-s li{justify-content:center}
+/* Barra lateral com pontas curvas e sombra sobre a página */
+.side{border-radius:0 28px 28px 0;box-shadow:8px 0 32px rgba(31,31,31,.20);z-index:6}
+:root[data-theme="dark"] .side{box-shadow:8px 0 32px rgba(0,0,0,.55)}
+@media (max-width:960px){
+  .side{border-radius:0 24px 24px 0}
+  .side{z-index:30} /* o menu aberto fica acima do fundo escurecido */
+  .abas-m{border-radius:0 0 22px 22px;box-shadow:0 10px 24px rgba(31,31,31,.22);padding-bottom:10px}
+  :root[data-theme="dark"] .abas-m{box-shadow:0 10px 24px rgba(0,0,0,.55)}
+}
+/* Celular: busca no lugar do menu lateral */
+.busca-m{display:none}
+@media (max-width:960px){
+  .side,.scrim{display:none !important} /* sem menu lateral no celular */
+  .busca-m:not([hidden]){display:flex;flex-direction:column;gap:8px;padding:12px 16px 0}
+  .bm-campo{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line-2);color:var(--muted)}
+  .bm-campo input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:15px;color:var(--ink);outline:none}
+  .bm-campo input::-webkit-search-cancel-button{display:none}
+  .bm-campo button{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 4px}
+  .bm-res{display:flex;flex-direction:column;border-radius:16px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+  .bm-res:empty{display:none}
+  .bm-res a{display:flex;flex-direction:column;gap:2px;padding:11px 16px;text-decoration:none;color:var(--ink);border-top:1px solid var(--line)}
+  .bm-res a:first-child{border-top:0}
+  .bm-res b{font-size:14px;text-transform:uppercase}
+  .bm-res small{font-size:12px;color:var(--muted)}
+  .bm-res .vazio{padding:12px 16px}
+}
+/* Celular: logo e abas num único bloco fixo, sem emenda entre eles */
+.topo-m{display:contents}
+@media (max-width:960px){
+  .topo-m{display:block;position:sticky;top:0;z-index:20;background:var(--night);border-radius:0 0 22px 22px;box-shadow:0 10px 24px rgba(31,31,31,.22)}
+  :root[data-theme="dark"] .topo-m{box-shadow:0 10px 24px rgba(0,0,0,.55)}
+  .topo-m .mtop,.topo-m .abas-m{position:static;box-shadow:none !important;border:0}
+  .topo-m .abas-m{border-radius:0 0 22px 22px}
+}
+/* rodapé da barra lateral afastado da curva do canto */
+.side .foot{padding:14px 22px 22px 22px} /* botão Tema: mesma distância da borda direita e do fim da barra */
 </style>
 </head>
 <body>
@@ -623,8 +819,9 @@ a.gn-row:hover .gn-txt b{text-decoration:underline;text-decoration-color:var(--c
 </aside>
 <div class="scrim" id="scrim"></div>
 <div class="main">
-  <div class="mtop"><img src="logo-exp-tagline-branco.png" alt="EXP BR · Projete com experts."><span id="mtitulo"></span><button class="tema m" data-tema aria-label="Alternar tema claro e escuro"><svg class="ico-tema so-claro" viewBox="0 0 24 24" fill="none" stroke="#DDDB00" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.2M12 19v2.2M2.8 12H5M19 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M5.5 18.5l1.6-1.6M16.9 7.1l1.6-1.6"/></svg><svg class="ico-tema so-escuro" viewBox="0 0 24 24" fill="none" stroke="#09A1E3" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 3.6a8.6 8.6 0 1 0 5 13.6a7 7 0 0 1-5-13.6z"/></svg></button><button id="menuBtn" aria-label="Abrir menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></div>
-  <nav class="abas-m" id="abasM" aria-label="Abas"></nav>
+  <header class="topo-m"><div class="mtop"><img src="logo-exp-tagline-branco.png" alt="EXP BR · Projete com experts."><span id="mtitulo"></span><button class="tema m" data-tema aria-label="Alternar tema claro e escuro"><svg class="ico-tema so-claro" viewBox="0 0 24 24" fill="none" stroke="#DDDB00" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.2M12 19v2.2M2.8 12H5M19 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M5.5 18.5l1.6-1.6M16.9 7.1l1.6-1.6"/></svg><svg class="ico-tema so-escuro" viewBox="0 0 24 24" fill="none" stroke="#09A1E3" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 3.6a8.6 8.6 0 1 0 5 13.6a7 7 0 0 1-5-13.6z"/></svg></button><button id="buscaBtn" aria-label="Buscar projeto" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></div>
+  <nav class="abas-m" id="abasM" aria-label="Abas"></nav></header>
+  <div class="busca-m" id="buscaM" hidden><label class="bm-campo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="qm" type="search" autocomplete="off" placeholder="Buscar projeto…"><button type="button" id="buscaFechar" aria-label="Fechar busca">✕</button></label><div class="bm-res" id="buscaRes"></div></div>
   <i class="deco-x" id="decoX" hidden aria-hidden="true"></i>
   <main class="content" id="conteudo"><p class="vazio">Carregando dados do Notion…</p></main>
 </div>
@@ -632,21 +829,25 @@ a.gn-row:hover .gn-txt b{text-decoration:underline;text-decoration-color:var(--c
 <script>
 // ====== Cliente deste site (o mesmo código serve a todos os clientes da EXP) ======
 const CFG = {"id": "victa", "nome": "Victa · Diagonal", "titulo": "Repasse Victa", "busca": "Buscar projeto ou analista…", "clientes": ["Victa", "Diagonal"], "analistas": true, "siglas": {"AP": "AP1", "PB": "AP2"}, "etapas": {"AP": "Anteprojeto 1", "PB": "Anteprojeto 2"}, "checklist": {"grupoDe": {"AP": "PB"}, "siglas": {"EP": "EP", "PB": "AP1 / AP2"}, "nomes": {"EP": "Estudo Preliminar", "PB": "Anteprojeto 1 e 2"}}, "logos": "<span class=\"lg-cli\"><img class=\"so-claro\" src=\"logo-diagonal.png\" alt=\"Diagonal\"><img class=\"so-escuro\" src=\"logo-diagonal-branco.png\" alt=\"Diagonal\"><img src=\"logo-victa.png\" alt=\"Victa\"></span>", "corLinha": "#6ECC01", "linhas": [["Vitória", [["PERY"], ["PAUPINA"], ["MARACANAU"], ["BARRA", "NOVA"]]], ["Viver", [["PICI"], ["PRAIA", "FUTURO"], ["SATIRO"], ["JARDIM", "CEARENSE"], ["NICOLAU"], ["COSTEIRA"]]], ["Vista", [["PRAINHA"], ["COQUEIRAL"], ["ATLANTICO"], ["EUSEBIO"]]], ["Diagonal INC", [["IRACEMA"], ["MEDUSA"], ["CAMBEBA", "LEITE"], ["INC", "GREEN"], ["FARIAS", "BRITO"], ["PARQUELANDIA"]]], ["Diagonal", [["AREIA"]]]], "sobre": {"fundo": "render-victa.webp", "predio": "predio-victa.webp", "alt": "Render de um empreendimento Victa", "pos": "right bottom"}};
+// v3: projetos com várias disciplinas ficam na aba Coordenação; projetos só de Incêndio ficam na aba Legalização (abaLegal)
+// legalCoord: tipos de legalização mostrados na Coordenação (Tenda: só Incêndio; sem a opção, Incêndio e Elétrico, e Infraestrutura se algum projeto tiver)
 const COM_ANA = !!CFG.analistas;
 if (CFG.corLinha) document.documentElement.style.setProperty("--linha-cor", CFG.corLinha); // cor da etiqueta "Linha de produto" // com analistas: pastas por analista, "Quem está acessando?" e filtros por analista
 // ====== Ajustes fáceis ======
 const SITE_EXP = "https://www.expbrasil.com";
+const NUMEROS_EXP = [["20 anos", "de experiência em BIM"], ["16 estados", "com projetos da EXP"], ["+ 2000", "serviços de projetos prestados"], ["+ 5 milhões", "de m² projetados"]]; // Brand Guidelines EXP 2026, p. 3
 const MISSAO = "Entregar previsibilidade técnica e financeira a construtoras e incorporadoras, com projetos de arquitetura e sistemas prediais coordenados em BIM."; // Brandbook EXP 2026
 const ATUALIZAR_A_CADA_MIN = 5;
 // Dados de exemplo (dos prints do Notion), usados só quando o site não consegue falar com o Notion
 const EXEMPLO = {"fonte": "exemplo", "atualizado": "2026-10-08T23:30:00.000Z", "hoje": "2026-10-08", "clientes": ["Victa", "Diagonal"], "analistas": [{"id": "agatha", "nome": "Agatha"}, {"id": "edvar", "nome": "Edvar"}, {"id": "eugenio", "nome": "Eugênio"}, {"id": "joao-paulo", "nome": "João Paulo"}, {"id": "valeska", "nome": "Valeska"}, {"id": "victoria", "nome": "Victoria"}], "opcoesPendencias": [], "projetos": [{"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000007", "titulo": "260122 - Victa [Parquelândia]", "codigo": "260122", "js": null, "nome": "Parquelândia", "cliente": "Victa", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": "2026-10-05", "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": true}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": true}, {"etapa": "PB", "item": "Estrutural", "ok": true}, {"etapa": "PB", "item": "Arquitetura", "ok": true}, {"etapa": "PB", "item": "Ambientação", "ok": true}, {"etapa": "PB", "item": "Luminotécnico", "ok": true}, {"etapa": "PB", "item": "Altura dos forros", "ok": true}, {"etapa": "PB", "item": "Paisagismo", "ok": true}, {"etapa": "PB", "item": "Validação", "ok": true}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": "2026-10-05", "fim": "2026-10-05", "inicio": "2026-09-11"}, {"sigla": "ELO", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": "2026-10-05", "fim": "2026-10-05", "inicio": "2026-09-09"}, {"sigla": "FUROS", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": "2026-10-14", "fim": "2026-10-14", "inicio": "2026-09-16"}, {"sigla": "INC", "etapa": "PB", "status": "PAUSADO", "entrega": "2026-10-05", "fim": "2026-10-05", "inicio": "2026-09-19"}, {"sigla": "HID", "etapa": "EX", "status": "POSTADO", "entrega": "2026-10-05", "fim": "2026-10-05", "inicio": "2026-09-20"}, {"sigla": "ESG", "etapa": "EX", "status": "POSTADO", "entrega": "2026-10-05", "fim": "2026-10-05", "inicio": "2026-09-09"}, {"sigla": "CLI", "etapa": "PB", "status": "POSTADO", "entrega": "2026-10-06", "fim": "2026-10-06", "inicio": "2026-09-11"}], "legal": [{"sigla": "INC", "status": "NÃO INICIADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "joao-paulo", "cronograma": [{"etapa": "PB", "inicio": "2026-09-18", "fim": "2026-11-10"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000000f", "titulo": "260111 - Victa [Vista Costeira 2]", "codigo": "260111", "js": null, "nome": "Vista Costeira 2", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-23", "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-10-10"}, {"sigla": "ELO", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-09-29"}, {"sigla": "ESG", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-10-04"}, {"sigla": "CLI", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-10-09"}, {"sigla": "HID", "etapa": "AP", "status": "REVISANDO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-10-11"}, {"sigla": "INC", "etapa": "AP", "status": "AGUARDANDO", "entrega": "2026-10-23", "fim": "2026-10-23", "inicio": "2026-09-26"}], "legal": [{"sigla": "INC", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "PARADO", "prazo": null, "retorno": null}], "analista": "victoria", "cronograma": [{"etapa": "AP", "inicio": "2026-09-12", "fim": "2026-10-23"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000016", "titulo": "260109 - Victa [MESSEJANA NICOLAU COELHO]", "codigo": "260109", "js": null, "nome": "MESSEJANA NICOLAU COELHO", "cliente": "Victa", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": true}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": true}, {"etapa": "PB", "item": "Estrutural", "ok": true}, {"etapa": "PB", "item": "Arquitetura", "ok": true}, {"etapa": "PB", "item": "Ambientação", "ok": true}, {"etapa": "PB", "item": "Luminotécnico", "ok": true}, {"etapa": "PB", "item": "Altura dos forros", "ok": true}, {"etapa": "PB", "item": "Paisagismo", "ok": true}, {"etapa": "PB", "item": "Validação", "ok": true}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "FUROS", "etapa": "PB", "status": "AGUARDANDO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-06"}, {"sigla": "INC", "etapa": "PB", "status": "EM PRODUÇÃO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-04"}, {"sigla": "INF", "etapa": "EP", "status": "EM PRODUÇÃO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-13"}, {"sigla": "HID", "etapa": "PB", "status": "REVISANDO", "entrega": "2026-10-02", "fim": "2026-10-02", "inicio": "2026-09-22"}, {"sigla": "ESG", "etapa": "PB", "status": "REVISANDO", "entrega": "2026-10-02", "fim": "2026-10-02", "inicio": "2026-09-06"}, {"sigla": "ELE", "etapa": "PB", "status": "POSTADO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-16"}, {"sigla": "ELO", "etapa": "PB", "status": "POSTADO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-17"}, {"sigla": "CLI", "etapa": "PB", "status": "POSTADO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-17"}], "legal": [{"sigla": "INC", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "valeska", "cronograma": [{"etapa": "PB", "inicio": "2026-09-10", "fim": "2026-10-14"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000001f", "titulo": "260136 - Diagonal [Cumbuco Pé na areia]", "codigo": "260136", "js": null, "nome": "Cumbuco Pé na areia", "cliente": "Diagonal", "etapa": "PL", "status": "EM PRODUÇÃO", "entrega": "2026-10-20", "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": true}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INC", "etapa": "PL", "status": "EM PRODUÇÃO", "entrega": "2026-10-14", "fim": "2026-10-14", "inicio": "2026-10-04"}, {"sigla": "ELE", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-09-25", "inicio": "2026-09-05"}, {"sigla": "ELO", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-09-25", "inicio": "2026-08-28"}, {"sigla": "HID", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-09-29", "inicio": "2026-09-03"}, {"sigla": "CLI", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-09-29", "inicio": "2026-09-10"}], "legal": [{"sigla": "INC", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}], "analista": "joao-paulo", "cronograma": [{"etapa": "PL", "inicio": "2026-09-26", "fim": "2026-10-02"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000025", "titulo": "260134 - Diagonal [DIAGONAL FARIAS BRITO]", "codigo": "260134", "js": null, "nome": "DIAGONAL FARIAS BRITO", "cliente": "Diagonal", "etapa": "EP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INC", "etapa": "EP", "status": "AGUARDANDO", "entrega": "2026-09-23", "fim": "2026-09-23", "inicio": "2026-09-11"}, {"sigla": "ELE", "etapa": "EP", "status": "AGUARDANDO", "entrega": null, "fim": "2026-10-05", "inicio": "2026-09-17"}, {"sigla": "ELO", "etapa": "EP", "status": "AGUARDANDO", "entrega": null, "fim": "2026-10-06", "inicio": "2026-09-09"}, {"sigla": "HID", "etapa": "EP", "status": "POSTADO", "entrega": "2026-09-25", "fim": "2026-09-25", "inicio": "2026-09-13"}, {"sigla": "CLI", "etapa": "EP", "status": "PAUSADO", "entrega": "2026-09-28", "fim": "2026-09-28", "inicio": "2026-09-10"}], "legal": [{"sigla": "INC", "status": "NÃO INICIADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "AGUARDANDO", "prazo": null, "retorno": null}], "analista": "joao-paulo", "cronograma": [{"etapa": "EP", "inicio": "2026-09-17", "fim": "2026-10-12"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000002b", "titulo": "260126 - Victa [AQUIRAZ MEDUSA]", "codigo": "260126", "js": null, "nome": "AQUIRAZ MEDUSA", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ESG", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-02", "fim": "2026-10-02", "inicio": "2026-09-06"}, {"sigla": "CLI", "etapa": "AP", "status": "POSTADO", "entrega": null, "fim": "2026-10-22", "inicio": "2026-10-12"}, {"sigla": "ELE", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-25", "inicio": "2026-09-27"}, {"sigla": "ELO", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-25", "inicio": "2026-10-03"}, {"sigla": "HID", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-25", "inicio": "2026-10-06"}, {"sigla": "INC", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-20", "inicio": "2026-10-08"}], "legal": [{"sigla": "INC", "status": "PROTOCOLADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "victoria", "cronograma": [{"etapa": "AP", "inicio": "2026-09-22", "fim": "2026-10-26"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000032", "titulo": "260108 - Victa [CAMBEBA INC GREEN]", "codigo": "260108", "js": null, "nome": "CAMBEBA INC GREEN", "cliente": "Victa", "etapa": "EX", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": true}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": true}, {"etapa": "PB", "item": "Estrutural", "ok": true}, {"etapa": "PB", "item": "Arquitetura", "ok": true}, {"etapa": "PB", "item": "Ambientação", "ok": true}, {"etapa": "PB", "item": "Luminotécnico", "ok": true}, {"etapa": "PB", "item": "Altura dos forros", "ok": true}, {"etapa": "PB", "item": "Paisagismo", "ok": true}, {"etapa": "PB", "item": "Validação", "ok": true}, {"etapa": "EX", "item": "Arquitetura", "ok": true}, {"etapa": "EX", "item": "Estrutural", "ok": true}, {"etapa": "EX", "item": "Ambientação", "ok": true}, {"etapa": "EX", "item": "Validação", "ok": true}], "disciplinas": [{"sigla": "ELE", "etapa": "EX", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-09", "inicio": "2026-09-23"}, {"sigla": "CLI", "etapa": "EX", "status": "POSTADO", "entrega": "2026-09-18", "fim": "2026-09-18", "inicio": "2026-09-07"}, {"sigla": "FUROS", "etapa": "EX", "status": "POSTADO", "entrega": "2026-09-21", "fim": "2026-09-21", "inicio": "2026-08-27"}, {"sigla": "INF", "etapa": "PL", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-06", "inicio": "2026-09-14"}, {"sigla": "ELO", "etapa": "EX", "status": "PARADO", "entrega": null, "fim": "2026-10-06", "inicio": "2026-09-24"}, {"sigla": "HID", "etapa": "EX", "status": "PARADO", "entrega": null, "fim": "2026-10-09", "inicio": "2026-09-21"}, {"sigla": "ESG", "etapa": "EX", "status": "PARADO", "entrega": null, "fim": "2026-10-07", "inicio": "2026-09-25"}, {"sigla": "INC", "etapa": "EX", "status": "PARADO", "entrega": null, "fim": "2026-10-08", "inicio": "2026-09-18"}], "legal": [{"sigla": "INC", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "eugenio", "cronograma": [{"etapa": "EX", "inicio": "2026-10-02", "fim": "2026-10-12"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000003b", "titulo": "255501 - Victa [JARDIM CEARENSE]", "codigo": "255501", "js": null, "nome": "JARDIM CEARENSE", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-11-06", "inicio": "2026-10-23"}, {"sigla": "ELO", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-11-04", "inicio": "2026-10-22"}, {"sigla": "HID", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-11-07", "inicio": "2026-10-27"}, {"sigla": "ESG", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-31", "inicio": "2026-10-06"}, {"sigla": "CLI", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-11-05", "inicio": "2026-10-09"}, {"sigla": "INF", "etapa": "AP", "status": "PARADO", "entrega": "2026-09-02", "fim": "2026-09-02", "inicio": "2026-08-17"}, {"sigla": "INC", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-31", "inicio": "2026-10-05"}], "legal": [{"sigla": "INC", "status": "PROTOCOLADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "AGUARDANDO PROTOCOLAR", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}], "analista": "victoria", "cronograma": [{"etapa": "AP", "inicio": "2026-10-02", "fim": "2026-11-07"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000043", "titulo": "25356 - Victa [AQUIRAZ PRAINHA 2]", "codigo": "25356", "js": null, "nome": "AQUIRAZ PRAINHA 2", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "PL", "status": "PAUSADO", "entrega": null, "fim": "2026-10-14", "inicio": "2026-09-22"}, {"sigla": "ELO", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-19", "inicio": "2026-09-27"}, {"sigla": "HID", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-14", "inicio": "2026-09-28"}, {"sigla": "ESG", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-20", "inicio": "2026-10-02"}, {"sigla": "INC", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-16", "inicio": "2026-10-06"}, {"sigla": "CLI", "etapa": "AP", "status": "PARADO", "entrega": null, "fim": "2026-10-17", "inicio": "2026-10-02"}], "legal": [{"sigla": "INC", "status": "PROTOCOLADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "NÃO INICIADO", "prazo": null, "retorno": null}], "analista": "victoria", "cronograma": [{"etapa": "AP", "inicio": "2026-09-26", "fim": "2026-10-20"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000004a", "titulo": "25314 - Victa [PRAIA DE IRACEMA]", "codigo": "25314", "js": null, "nome": "PRAIA DE IRACEMA", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-18", "inicio": "2026-10-04"}, {"sigla": "ELO", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-15", "inicio": "2026-09-21"}, {"sigla": "HID", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-14", "inicio": "2026-10-04"}, {"sigla": "ESG", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-13", "inicio": "2026-09-24"}, {"sigla": "INC", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-12", "inicio": "2026-09-30"}, {"sigla": "CLI", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-17", "inicio": "2026-10-05"}], "legal": [{"sigla": "INC", "status": "PROTOCOLADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}], "analista": "valeska", "cronograma": [{"etapa": "AP", "inicio": "2026-09-20", "fim": "2026-10-18"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000051", "titulo": "260128 - Victa [Pici matos dourados]", "codigo": "260128", "js": null, "nome": "Pici matos dourados", "cliente": "Victa", "etapa": "EP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INF", "etapa": "EX", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-01", "inicio": "2026-09-10"}], "legal": [{"sigla": "ELE", "status": "REAPROVAR", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}], "analista": "valeska", "cronograma": [{"etapa": "EP", "inicio": "2026-09-26", "fim": "2026-10-06"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000053", "titulo": "260124 - Victa [Cambeba Moreira Leite]", "codigo": "260124", "js": null, "nome": "Cambeba Moreira Leite", "cliente": "Victa", "etapa": "EP", "status": "EM PRODUÇÃO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INF", "etapa": "EP", "status": "AGUARDANDO", "entrega": null, "fim": "2026-11-08", "inicio": "2026-10-11"}, {"sigla": "ELE", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-03", "inicio": "2026-10-06"}, {"sigla": "INC", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-08", "inicio": "2026-10-17"}, {"sigla": "HID", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-08", "inicio": "2026-10-25"}, {"sigla": "ESG", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-06", "inicio": "2026-10-20"}, {"sigla": "CLI", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-07", "inicio": "2026-10-22"}, {"sigla": "ELO", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-08", "inicio": "2026-10-12"}], "legal": [{"sigla": "INC", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "NÃO INICIADO", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "eugenio", "cronograma": [{"etapa": "EP", "inicio": "2026-09-13", "fim": "2026-11-10"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-00000000005b", "titulo": "260125 - Victa [Manoel Sátiro 01]", "codigo": "260125", "js": null, "nome": "Manoel Sátiro 01", "cliente": "Victa", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INC", "etapa": "PL", "status": "EM PRODUÇÃO", "entrega": "2026-10-09", "fim": "2026-10-09", "inicio": "2026-09-14"}, {"sigla": "ELE", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "fim": "2026-10-19", "inicio": "2026-10-07"}, {"sigla": "ELO", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "fim": "2026-10-19", "inicio": "2026-09-26"}, {"sigla": "HID", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "fim": "2026-10-19", "inicio": "2026-10-08"}, {"sigla": "ESG", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "fim": "2026-10-19", "inicio": "2026-10-06"}, {"sigla": "CLI", "etapa": "AP", "status": "EM PRODUÇÃO", "entrega": "2026-10-19", "fim": "2026-10-19", "inicio": "2026-10-06"}, {"sigla": "INF", "etapa": "EP", "status": "REVISANDO", "entrega": "2026-12-10", "fim": "2026-12-10", "inicio": "2026-11-29"}], "legal": [{"sigla": "INC", "status": "NÃO INICIADO", "prazo": null, "retorno": null}, {"sigla": "INF", "status": "PROTOCOLADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "PROTOCOLADO", "prazo": null, "retorno": null}], "analista": "eugenio", "cronograma": [{"etapa": "AP", "inicio": "2026-09-26", "fim": "2026-11-05"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000063", "titulo": "260133 - Victa [Caucaia Barra Nova]", "codigo": "260133", "js": null, "nome": "Caucaia Barra Nova", "cliente": "Victa", "etapa": "EP", "status": "PARADO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "ELE", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-25", "inicio": "2026-10-03"}, {"sigla": "ELO", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-24", "inicio": "2026-10-01"}, {"sigla": "HID", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-21", "inicio": "2026-10-02"}, {"sigla": "INC", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-20", "inicio": "2026-10-05"}, {"sigla": "CLI", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-27", "inicio": "2026-10-13"}], "legal": [{"sigla": "INC", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "REVISANDO", "prazo": null, "retorno": null}], "analista": "agatha", "cronograma": [{"etapa": "EP", "inicio": "2026-09-16", "fim": "2026-10-28"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000069", "titulo": "260127 - Victa [Eusebio Fco Oliveira]", "codigo": "260127", "js": null, "nome": "Eusebio Fco Oliveira", "cliente": "Victa", "etapa": "EP", "status": "PARADO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "HID", "etapa": "EP", "status": "REVISANDO", "entrega": null, "fim": "2026-11-03", "inicio": "2026-10-22"}, {"sigla": "ESG", "etapa": "EP", "status": "REVISANDO", "entrega": null, "fim": "2026-11-07", "inicio": "2026-10-22"}, {"sigla": "INC", "etapa": "EP", "status": "PAUSADO", "entrega": "2026-09-14", "fim": "2026-09-14", "inicio": "2026-08-29"}, {"sigla": "CLI", "etapa": "EP", "status": "PAUSADO", "entrega": "2026-09-14", "fim": "2026-09-14", "inicio": "2026-09-04"}, {"sigla": "ELE", "etapa": "EP", "status": "PAUSADO", "entrega": null, "fim": "2026-11-10", "inicio": "2026-10-23"}, {"sigla": "ELO", "etapa": "EP", "status": "PAUSADO", "entrega": null, "fim": "2026-11-05", "inicio": "2026-10-12"}], "legal": [{"sigla": "INC", "status": "EM ESTUDO INICIAL", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}], "analista": "victoria", "cronograma": [{"etapa": "EP", "inicio": "2026-09-25", "fim": "2026-11-11"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000070", "titulo": "255502 - Victa [MANOEL SÁTIRO]", "codigo": "255502", "js": null, "nome": "MANOEL SÁTIRO", "cliente": "Victa", "etapa": "PL", "status": "PARADO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": true}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INC", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-15", "inicio": "2026-09-30"}, {"sigla": "INC", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-11", "inicio": "2026-09-20"}, {"sigla": "INC", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-07", "inicio": "2026-09-09"}, {"sigla": "HID", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-13", "inicio": "2026-10-01"}, {"sigla": "ESG", "etapa": "PL", "status": "PARADO", "entrega": null, "fim": "2026-10-10", "inicio": "2026-09-26"}], "legal": [{"sigla": "INC", "status": "REAPROVAR", "prazo": null, "retorno": null}, {"sigla": "INC", "status": "APROVADO", "prazo": null, "retorno": null}, {"sigla": "INC", "status": "APROVADO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}], "analista": "eugenio", "cronograma": [{"etapa": "PL", "inicio": "2026-09-25", "fim": "2026-10-15"}]}, {"id": "aaaaaaaa-bbbb-4ccc-8ddd-000000000076", "titulo": "25359 - Victa [CAUCAIA PERY]", "codigo": "25359", "js": null, "nome": "CAUCAIA PERY", "cliente": "Victa", "etapa": "EP", "status": "PARADO", "entrega": null, "pendencias": [], "requisitos": [{"etapa": "EP", "item": "Arquitetura", "ok": true}, {"etapa": "EP", "item": "Diretrizes", "ok": true}, {"etapa": "PL", "item": "Documentos", "ok": false}, {"etapa": "PB", "item": "IFC Arquitetura", "ok": false}, {"etapa": "PB", "item": "Estrutural", "ok": false}, {"etapa": "PB", "item": "Arquitetura", "ok": false}, {"etapa": "PB", "item": "Ambientação", "ok": false}, {"etapa": "PB", "item": "Luminotécnico", "ok": false}, {"etapa": "PB", "item": "Altura dos forros", "ok": false}, {"etapa": "PB", "item": "Paisagismo", "ok": false}, {"etapa": "PB", "item": "Validação", "ok": false}, {"etapa": "EX", "item": "Arquitetura", "ok": false}, {"etapa": "EX", "item": "Estrutural", "ok": false}, {"etapa": "EX", "item": "Ambientação", "ok": false}, {"etapa": "EX", "item": "Validação", "ok": false}], "disciplinas": [{"sigla": "INC", "etapa": "PL", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-25", "inicio": "2026-09-27"}, {"sigla": "CLI", "etapa": "EP", "status": "EM PRODUÇÃO", "entrega": null, "fim": "2026-10-31", "inicio": "2026-10-03"}, {"sigla": "ELE", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-02", "inicio": "2026-10-23"}, {"sigla": "ELO", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-26", "inicio": "2026-10-05"}, {"sigla": "HID", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-10-29", "inicio": "2026-10-18"}, {"sigla": "ESG", "etapa": "EP", "status": "PARADO", "entrega": null, "fim": "2026-11-02", "inicio": "2026-10-21"}], "legal": [{"sigla": "INC", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}, {"sigla": "ELE", "status": "EM DESENVOLVIMENTO", "prazo": null, "retorno": null}], "analista": "edvar", "cronograma": [{"etapa": "EP", "inicio": "2026-09-18", "fim": "2026-11-02"}]}], "avisos": []};
 
 // ====== Dicionários ======
-const FLUXO = ["EP", "AP", "PB", "EX"];
+const FLUXO = CFG.fluxo || ["EP", "AP", "PB", "EX"]; // etapas mestre, na ordem (ex.: Tenda: EP, PL, EX, LO)
+const ETAPA_ALIAS = CFG.etapaAlias || {}; // etapas do Notion lidas como outra (ex.: Tenda: AP e PB contam como EX)
 const ETAPAS = {
   EP: { nome: "Estudo Preliminar", cor: "var(--ep)" }, AP: { nome: "Anteprojeto", cor: "var(--ap)" },
   PB: { nome: "Projeto Básico", cor: "var(--pb)" }, EX: { nome: "Projeto Executivo", cor: "var(--ex)" },
-  PL: { nome: "Projeto Legal", cor: "var(--pl)" }, REV: { nome: "Revisão", cor: "var(--rev)" },
+  PL: { nome: "Projeto Legal", cor: "var(--pl)" }, REV: { nome: "Revisão", cor: "var(--rev)" }, LO: { nome: "Liberado para obra", cor: "var(--lo)" },
 };
 // Ícones de linha (traço 2, cantos arredondados), no mesmo estilo do site da EXP
 const ic = {
@@ -673,8 +874,8 @@ const DISC = {
 const ORDEM = ["CLI", "ESG", "HID", "PIS", "INF", "ELE", "SBE", "SPDA", "INC", "ELO", "FUROS", "FUR"];
 // Status das disciplinas, simplificados para o cliente: rótulo, fundo, texto, (cor nas barras/gráficos)
 const ST = {
-  "POSTADO": ["Postado", "#09A1E3", "#121212"], "EM PRODUCAO": ["Em produção", "#3BAA63", "#121212"],
-  "AGUARDANDO": ["Aguardando", "#F28C28", "#121212"], "PAUSADO": ["Pausado", "#C23E92", "#121212"],
+  "POSTADO": ["Postado", "#09A1E3", "#1F1F1F"], "EM PRODUCAO": ["Em produção", "#3BAA63", "#1F1F1F"],
+  "AGUARDANDO": ["Aguardando", "#F28C28", "#1F1F1F"], "PAUSADO": ["Pausado", "#C23E92", "#1F1F1F"],
   "PARADO": ["Parado", null, null, "var(--vazio)"], // Parado: vazado, para destacar os demais
 };
 // Nomes do Notion que o site agrupa num status simples
@@ -682,8 +883,8 @@ const ST_ALIAS = { "REVISANDO": "EM PRODUCAO", "REVISAR": "EM PRODUCAO", "EM REV
 const stNorm = (s) => { const k = norm(s); return ST_ALIAS[k] || k; };
 const BARRA = Object.fromEntries(Object.entries(ST).map(([k, v]) => [k, v[3] || v[1]])); // mesma cor nas barras e gráficos
 const LEGAL = { // rótulo, fundo, texto, ordem de avanço, (cor nos gráficos)
-  "APROVADO": ["Aprovado", "#09A1E3", "#121212", 5], "PROTOCOLADO": ["Protocolado", "#DDDB00", "#121212", 4],
-  "EM PRODUCAO": ["Em produção", "#3BAA63", "#121212", 2], "AGUARDANDO": ["Aguardando", "#F28C28", "#121212", 1],
+  "APROVADO": ["Aprovado", "#09A1E3", "#1F1F1F", 5], "PROTOCOLADO": ["Protocolado", "#DDDB00", "#1F1F1F", 4],
+  "EM PRODUCAO": ["Em produção", "#3BAA63", "#1F1F1F", 2], "AGUARDANDO": ["Aguardando", "#F28C28", "#1F1F1F", 1],
   "PARADO": ["Parado", null, null, 0, "var(--vazio)"], "NAO SE APLICA": ["Não se aplica", null, null, -1, "var(--vazio)"],
 };
 const LEGAL_ALIAS = { "EM DESENVOLVIMENTO": "EM PRODUCAO", "DESENVOLVIMENTO": "EM PRODUCAO", "EM ELABORACAO": "EM PRODUCAO", "AGUARDANDO PROTOCOLAR": "EM PRODUCAO",
@@ -691,6 +892,7 @@ const LEGAL_ALIAS = { "EM DESENVOLVIMENTO": "EM PRODUCAO", "DESENVOLVIMENTO": "E
   "EM ANALISE": "PROTOCOLADO", "NAO INICIADO": "PARADO" };
 const TODOS_LEGAL = [["Incêndio", "#D62828", ["INC"]], ["Elétrico", "#E06A00", ["ELE", "SBE"]], ["Infraestrutura", "#8A5A2B", ["INF"]]];
 let GRUPOS_LEGAL = TODOS_LEGAL; // ajustado ao carregar os dados (Infraestrutura só se algum projeto tiver)
+let GRUPOS_LEGAL_COORD = TODOS_LEGAL; // tipos de legalização na aba Coordenação (v3)
 
 // ====== Utilidades ======
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -700,8 +902,8 @@ const data = (iso) => (iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice
 const lum = (h) => { const n = parseInt(String(h).slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
 // No tema escuro, etiquetas coloridas usam texto escuro (exceto as de fundo escuro, como "Não iniciado")
 const pill = ([r, f, c]) => f ? `<span class="pill${String(f).startsWith("#") && lum(f) > 0.3 ? " cor" : ""}" style="background:${f};color:${c}">${esc(r)}</span>` : `<span class="pill o">${esc(r)}</span>`;
-const stDisc = (s) => ST[stNorm(s)] || [cap(s) || "—", "#E4E4DC", "#121212"];
-const stLegal = (s) => { const k = norm(s); return LEGAL[LEGAL_ALIAS[k] || k] || [cap(s) || "—", "#E4E4DC", "#121212", 1]; };
+const stDisc = (s) => ST[stNorm(s)] || [cap(s) || "—", "#E4E4DC", "#1F1F1F"];
+const stLegal = (s) => { const k = norm(s); return LEGAL[LEGAL_ALIAS[k] || k] || [cap(s) || "—", "#E4E4DC", "#1F1F1F", 1]; };
 const disc = (s) => { const d = DISC[norm(s)]; return d ? { nome: d[0], cor: d[1], icone: d[2] } : { nome: s || "—", cor: "#6B6B66", icone: ic.dot }; };
 // Siglas e nomes de etapa próprios do cliente (ex.: na Victa, AP aparece como AP1 e PB como AP2; no Notion continua AP e PB)
 Object.entries(CFG.etapas || {}).forEach(([k, nome]) => { if (ETAPAS[k]) ETAPAS[k].nome = nome; });
@@ -727,14 +929,28 @@ function legalDe(p, siglas) { // junta as linhas do grupo (ex.: ELE + SBE) e mos
 // Em qual grupo do checklist cada etapa entra (ex.: Victa: AP usa o checklist do PB; J.Simões: AP usa o do EP). PL vem logo depois do EP e sempre entra nas pendências
 const GRUPO_DE = { EP: "EP", PE: "EX", PB: "PB", EX: "EX", PL: "PL", ...CFG.checklist.grupoDe };
 const POS_GRUPO = { EP: 1, PB: 2, EX: 3 }; // requisito para chegar em AP, PB e EX
-const POS_ETAPA = { EP: 0, AP: 1, PB: 2, EX: 3 };
+const POS_ETAPA = { EP: 0, AP: 1, PB: 2, EX: 3, ...CFG.posEtapa };
+// Projeto só de Incêndio (sem outras disciplinas): as pendências param no PL
+// (na Tenda quase tudo é só Incêndio: conta como "só Incêndio" quem tem menos de 2 disciplinas além do Incêndio)
+const soIncendio = (p) => !!CFG.soIncendioSoPL && p.disciplinas.filter((d) => norm(d.sigla) !== "INC").length < 2;
+// Separação v3: Legalização = projetos só de Incêndio; Coordenação = projetos com várias disciplinas
+const ehLegal = (p) => !!CFG.abaLegal && soIncendio(p);
+const grupoProj = (p) => (ehLegal(p) ? "legalizacao" : "coordenacao");
+const nomeGrupo = (p) => (ehLegal(p) ? "Legalização" : "Coordenação");
+const projsCoord = () => base().filter((p) => !ehLegal(p));
+const projsLegal = () => base().filter(ehLegal);
+// Status legal do Incêndio, como chave (APROVADO, PROTOCOLADO...) para contar e filtrar
+const legKey = (s) => { const k = norm(s), kk = LEGAL_ALIAS[k] || k; return LEGAL[kk] ? kk : "OUTRO"; };
+const LEG_ORD = ["EM PRODUCAO", "AGUARDANDO", "PROTOCOLADO", "APROVADO", "PARADO", "NAO SE APLICA", "OUTRO"];
+const legInc = (p) => legalDe(p, ["INC"]);
+const kLegal = (p) => { const l = legInc(p); return l ? legKey(l.status) : "SEM"; };
 const SIG_GRUPO = { EX: "EX", PL: "PL", ...CFG.checklist.siglas };
 const NOME_GRUPO = { EX: "Projeto Executivo", PL: "Projeto Legal", ...CFG.checklist.nomes };
 const COR_GRUPO = { EP: "var(--ep)", PB: "var(--pb)", EX: "var(--ex)", PL: "var(--pl)" };
 const ORDEM_ITENS = { PB: ["IFC ARQUITETURA", "ESTRUTURAL", "ARQUITETURA", "AMBIENTACAO", "LUMINOTECNICO", "ALTURA DOS FORROS", "PAISAGISMO", "VALIDACAO"], "*": ["ARQUITETURA", "DIRETRIZES", "DOCUMENTOS", "ESTRUTURAL", "AMBIENTACAO", "VALIDACAO"] };
 const nomeItem = (t) => (norm(t).startsWith("VALIDACAO") && norm(t).length <= 12 ? "Validação da etapa anterior" : t);
 function grupos(p) {
-  const req = (p.requisitos || []).map((r) => ({ ...r, g: GRUPO_DE[norm(r.etapa)] })).filter((r) => r.g);
+  const req = (p.requisitos || []).map((r) => ({ ...r, g: GRUPO_DE[norm(r.etapa)] })).filter((r) => r.g && (!soIncendio(p) || r.g === "PL"));
   const seq = ["EP", "PB", "EX"].filter((k) => req.some((r) => r.g === k));
   const atual = POS_ETAPA[norm(p.etapa)] ?? -1;
   const alvo = seq.find((k) => POS_GRUPO[k] > atual) || (seq.includes("EX") && atual >= 3 ? "EX" : null);
@@ -744,12 +960,16 @@ function grupos(p) {
     const pref = ORDEM_ITENS[k] || ORDEM_ITENS["*"];
     const pos = (t) => { const i = pref.findIndex((x) => norm(t).startsWith(x)); return i < 0 ? 50 : i; };
     const itens = req.filter((r) => r.g === k).sort((a, b) => pos(a.item) - pos(b.item) || a.item.localeCompare(b.item));
-    const exigido = k === "PL" || POS_GRUPO[k] <= posAlvo; // até a etapa-alvo (e o PL), o que falta é pendência
+    const exigido = !finalizado(p) && (k === "PL" || POS_GRUPO[k] <= posAlvo); // até a etapa-alvo (e o PL), o que falta é pendência
     return { k, itens, exigido, alvo: k === alvo, aParte: k === "PL", feitos: itens.filter((r) => r.ok).length };
   });
 }
 // Pendências do projeto: itens não marcados até a próxima etapa; sem checklist, usa o campo de múltipla seleção
+// Projeto só de Incêndio tem só EP e PL; com o Incêndio aprovado, o projeto está finalizado
+const fluxoDe = (p) => (soIncendio(p) ? FLUXO.filter((k) => k === "EP" || k === "PL") : FLUXO);
+const finalizado = (p) => soIncendio(p) && p.legal.some((l) => norm(l.sigla) === "INC" && (stLegal(l.status)[0] === LEGAL.APROVADO[0] || norm(l.status).startsWith("APROVAD")));
 function pendentes(p) {
+  if (finalizado(p)) return [];
   if ((p.requisitos || []).length) return grupos(p).filter((g) => g.exigido).flatMap((g) => g.itens.filter((r) => !r.ok).map((r) => r.item));
   return p.pendencias.filter((x) => norm(x) !== "LIBERADO");
 }
@@ -785,14 +1005,14 @@ function linhaDe(p) {
   return l ? l[0] : null;
 }
 const linhaTag = (p) => { const l = linhaDe(p); return l ? `<span class="cli linha" title="Linha de produto">Linha ${esc(l)}</span>` : cliTag(p); };
-const cliTag = (p) => p.cliente ? `<span class="cli${CFG.clientes.indexOf(p.cliente) > 0 ? " alt" : ""}">${esc(p.cliente)}</span>` : "";
+const cliTag = (p) => p.cliente ? `<span class="cli${CFG.clientes.length === 1 && CFG.corLinha ? " linha" : CFG.clientes.indexOf(p.cliente) > 0 ? " alt" : ""}">${esc(p.cliente)}</span>` : ""; // um cliente só: etiqueta na cor da logo dele
 const icoPasta = `<svg class="fold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`;
 // Próximas entregas: disciplinas não postadas com data nas próximas 2 semanas (e as atrasadas)
 const hojeISO = () => (DADOS && DADOS.hoje) || new Date().toISOString().slice(0, 10);
 const diaN = (iso) => Math.round((Date.parse(iso) - Date.parse(hojeISO())) / 864e5);
 const SEMANA = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 function proximas(projs, dias = 14) {
-  return projs.flatMap((p) => p.disciplinas.filter((d) => norm(d.status) !== "POSTADO" && d.entrega && diaN(d.entrega) <= dias).map((d) => ({ p, d }))).sort((a, b) => a.d.entrega.localeCompare(b.d.entrega));
+  return projs.filter((p) => !ehLegal(p)).flatMap((p) => p.disciplinas.filter((d) => norm(d.status) !== "POSTADO" && d.entrega && diaN(d.entrega) <= dias).map((d) => ({ p, d }))).sort((a, b) => a.d.entrega.localeCompare(b.d.entrega));
 }
 function blocoProximas(projs, comAnalista) {
   const itens = proximas(projs), grupos = {};
@@ -813,7 +1033,9 @@ function blocoProximas(projs, comAnalista) {
 
 // ====== Páginas ======
 function pgGeral(a) {
-  const doGrupo = base().filter((p) => !a || p.analista === a.id);
+  const doGrupo = base().filter((p) => (!a || p.analista === a.id) && !ehLegal(p));
+  const nLegal = a ? 0 : projsLegal().length;
+  const GL = GRUPOS_LEGAL_COORD;
   const quando = new Date(DADOS.atualizado || Date.now());
   const carimbo = `${quando.toLocaleDateString("pt-BR")} às ${quando.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
   const contagem = FLUXO.map((k) => [k, doGrupo.filter((p) => norm(p.etapa) === k).length]);
@@ -826,7 +1048,7 @@ function pgGeral(a) {
     const tot = p.disciplinas.length, post = postadas(p), seg = {};
     p.disciplinas.forEach((d) => { const k = stKey(d.status); seg[k] = (seg[k] || 0) + 1; });
     const barra = Object.keys(BARRA).filter((k) => seg[k]).map((k) => `<i style="flex:${seg[k]};background:${BARRA[k]}"></i>`).join("");
-    const leg = GRUPOS_LEGAL.map(([nome, , s]) => { const l = legalDe(p, s); return `<div class="cel c"><span class="lbl">Legalização ${nome}</span>${l ? pill(stLegal(l.status)) : '<span class="dash">—</span>'}</div>`; }).join("");
+    const leg = GL.map(([nome, , s]) => { const l = legalDe(p, s); return `<div class="cel c"><span class="lbl">Legalização ${nome}</span>${l ? pill(stLegal(l.status)) : '<span class="dash">—</span>'}</div>`; }).join("");
     const g = globalData(p); if (g.asterisco) asterisco = true;
     const n = pendentes(p).length;
     return `<a class="linha" href="#${slug(p)}">
@@ -841,13 +1063,14 @@ ${leg}
   const filtroTxt = filtro !== "all" || busca ? `<p class="nota">Mostrando ${lista.length} de ${doGrupo.length} projetos${filtro !== "all" ? ` em ${ETAPAS[filtro].nome}` : ""}. <a href="#" id="limpar">Mostrar todos</a></p>` : "";
   return `<section class="view">
 ${a ? `${acesso === "gestao" ? `<nav class="trilha" aria-label="Você está em"><a href="#coordenacao">Coordenação</a><span>›</span><span>Analistas</span></nav>` : ""}
-<header class="cab-ana"><h1>${icoPasta}${esc(a.nome)}</h1><div class="meta"><span>Analista · ${doGrupo.length} projeto${doGrupo.length === 1 ? "" : "s"}</span>${[...new Set(doGrupo.map((p) => p.cliente).filter(Boolean))].map((c) => cliTag({ cliente: c })).join("")}${selo()}</div></header>${subAbas("a-" + a.id, "")}` : cabMin(`Coordenação · ${doGrupo.length} projetos${COM_ANA ? ` · ${new Set(doGrupo.map((p) => p.analista)).size} analistas` : ""}`, esc(CFG.nome))}
+<header class="cab-ana"><h1>${icoPasta}${esc(a.nome)}</h1><div class="meta"><span>Analista · ${doGrupo.length} projeto${doGrupo.length === 1 ? "" : "s"}</span>${[...new Set(doGrupo.map((p) => p.cliente).filter(Boolean))].map((c) => cliTag({ cliente: c })).join("")}${selo()}</div></header>${subAbas("a-" + a.id, "")}` : cabMin(`Coordenação · ${doGrupo.length} projeto${doGrupo.length === 1 ? "" : "s"}${CFG.abaLegal ? " com várias disciplinas" : ""}${COM_ANA ? ` · ${new Set(doGrupo.map((p) => p.analista)).size} analistas` : ""}`, "Coordenação")}
+${nLegal ? `<p class="nota ponte">${icoLegal}<span>${nLegal} projeto${nLegal === 1 ? "" : "s"} só de Incêndio fica${nLegal === 1 ? "" : "m"} na aba <a href="#legalizacao">Legalização</a>.</span></p>` : ""}
 <div class="etapas" role="group" aria-label="Projetos por etapa global">${tiles}</div>
 <section style="display:flex;flex-direction:column;gap:14px">
   <div class="sec-h"><div><p class="eyebrow">Coordenação</p><h2 class="t">Situação dos projetos</h2></div>${legenda}</div>
   ${filtroTxt}
-  <div class="card tabela" style="--nleg:${GRUPOS_LEGAL.length}">
-    <div class="linha cab"><span>Projeto</span><span class="c">Etapa global</span><span class="c">Disciplinas postadas</span>${GRUPOS_LEGAL.map(([nome]) => `<span class="c"><em>Legalização</em>${nome}</span>`).join("")}<span class="c">Próxima postagem global</span><span class="c">Pendências</span><span></span></div>
+  <div class="card tabela" style="--nleg:${GL.length}">
+    <div class="linha cab"><span>Projeto</span><span class="c">Etapa global</span><span class="c">Disciplinas postadas</span>${GL.map(([nome]) => `<span class="c"><em>Legalização</em>${nome}</span>`).join("")}<span class="c">Próxima postagem global</span><span class="c">Pendências</span><span></span></div>
     ${linhas || '<p class="vazio">Nenhum projeto com esse filtro.</p>'}
   </div>
   ${asterisco ? '<p class="nota"><b>*</b> Projeto com disciplinas em datas diferentes: mostrada a data da etapa global. Ver a página do projeto.</p>' : ""}
@@ -856,9 +1079,65 @@ ${blocoProximas(doGrupo, !a)}
 </section>`;
 }
 
+// ====== Legalização (v3): projetos só de Incêndio ======
+let filtroLeg = "all";
+const corLeg = (k) => (LEGAL[k] ? LEGAL[k][4] || LEGAL[k][1] : "var(--vazio)");
+const rotLeg = (k) => (LEGAL[k] ? LEGAL[k][0] : k === "SEM" ? "Sem cartão" : "Outro");
+const quandoTxt = (iso) => { const n = diaN(iso); return n === 0 ? "hoje" : n === 1 ? "amanhã" : n > 0 ? `em ${n} dias` : `vencida há ${-n} dia${n < -1 ? "s" : ""}`; };
+function contLegal(ps) { const c = {}; ps.forEach((p) => { const k = kLegal(p); c[k] = (c[k] || 0) + 1; }); return c; }
+function blocoRetornos(ps, limite = 8) {
+  const it = ps.map((p) => ({ p, l: legInc(p) })).filter(({ l }) => l && legKey(l.status) === "PROTOCOLADO")
+    .sort((a, b) => String(a.l.retorno || "9").localeCompare(String(b.l.retorno || "9")));
+  const linhas = it.slice(0, limite).map(({ p, l }) => `<a class="mini-e${l.retorno && diaN(l.retorno) < 0 ? " atr" : ""}" href="#${slug(p)}"><span class="md num">${l.retorno ? `<b>${l.retorno.slice(8, 10)}/${l.retorno.slice(5, 7)}</b><small>${quandoTxt(l.retorno)}</small>` : '<b class="dash">—</b><small>sem previsão</small>'}</span><span class="mn"><b>${esc(p.nome)}</b><small>${l.protocolo ? `Protocolado em ${data(l.protocolo)}` : "Em análise no órgão"}${l.protocolos > 1 ? ` · ${l.protocolos}º protocolo` : ""}</small></span>${pill(stLegal(l.status))}</a>`).join("");
+  return `<section class="card bloco"><header><div><p class="eyebrow">Protocolados</p><h2 class="t">Retornos previstos</h2></div><small>${it.length} em análise</small></header>
+  <div class="mini-lista">${linhas || '<p class="vazio">Nenhum projeto protocolado aguardando retorno.</p>'}</div>
+  ${it.length > limite ? `<p class="nota">e mais ${it.length - limite}.</p>` : ""}</section>`;
+}
+function pgLegal() {
+  const todos = projsLegal(), doGrupo = todos.filter(visivel), cont = contLegal(doGrupo);
+  const ks = LEG_ORD.filter((k) => cont[k] || ["EM PRODUCAO", "AGUARDANDO", "PROTOCOLADO", "APROVADO"].includes(k)).concat(cont.SEM ? ["SEM"] : []);
+  const tiles = ks.map((k) => `<button class="etapa-t lg" style="--c:${corLeg(k)}" data-fl="${k}" aria-pressed="${filtroLeg === k}"><b class="num">${cont[k] || 0}</b><span>${rotLeg(k)}</span></button>`).join("");
+  const pos = (p) => { const i = LEG_ORD.indexOf(kLegal(p)); return i < 0 ? 99 : i; };
+  const lista = doGrupo.filter((p) => filtroLeg === "all" || kLegal(p) === filtroLeg).sort((a, b) => pos(a) - pos(b) || a.nome.localeCompare(b.nome));
+  const dash = '<span class="dash">—</span>';
+  const linhas = lista.map((p) => {
+    const l = legInc(p);
+    const kk = l ? legKey(l.status) : "SEM";
+    const ret = l && l.retorno && kk === "PROTOCOLADO" ? `<span class="rt"><b>${data(l.retorno)}</b><small class="${diaN(l.retorno) < 0 ? "atr" : ""}">${quandoTxt(l.retorno)}</small></span>` : dash;
+    const prot = l && l.protocolo ? `<b>${data(l.protocolo)}</b>` : dash;
+    const apr = l && l.aprovacao ? `<b>${data(l.aprovacao)}</b>` : dash;
+    const nP = l ? l.protocolos || 0 : 0;
+    return `<a class="linha lgl" href="#${slug(p)}">
+<div class="pj"><b>${nomeHtml(p)}</b><small>${subProj(p, false)}</small></div>
+<div class="cel c"><span class="lbl">Etapa</span>${etq(p.etapa)}</div>
+<div class="cel c"><span class="lbl">Legalização</span>${l ? pill(stLegal(l.status)) : '<span class="pill o">Sem cartão</span>'}</div>
+<div class="cel c num"><span class="lbl">Protocolo atual</span>${prot}</div>
+<div class="cel c num"><span class="lbl">Previsão de retorno</span>${ret}</div>
+<div class="cel c num"><span class="lbl">Aprovação</span>${apr}</div>
+<div class="cel c num"><span class="lbl">Protocolos</span>${nP ? `<span class="nprot" title="${nP} protocolo${nP > 1 ? "s" : ""} realizado${nP > 1 ? "s" : ""}">${nP}</span>` : dash}</div>
+<span class="chev">${chevron}</span></a>`;
+  }).join("");
+  const filtrando = filtroLeg !== "all" || filtro !== "all" || busca;
+  const filtroTxt = filtrando ? `<p class="nota">Mostrando ${lista.length} de ${todos.length} projetos${filtroLeg !== "all" ? ` com legalização ${rotLeg(filtroLeg).toLowerCase()}` : ""}${filtro !== "all" ? ` em ${ETAPAS[filtro].nome}` : ""}. <a href="#" id="limpar">Mostrar todos</a></p>` : "";
+  const nCoord = projsCoord().length;
+  return `<section class="view">
+${cabMin(`Legalização · ${todos.length} projeto${todos.length === 1 ? "" : "s"} só de Incêndio`, "Legalização")}
+${nCoord ? `<p class="nota ponte">${icoCoord}<span>${nCoord} projeto${nCoord === 1 ? "" : "s"} com várias disciplinas fica${nCoord === 1 ? "" : "m"} na aba <a href="#coordenacao">Coordenação</a>.</span></p>` : ""}
+<div class="etapas lgt" style="grid-template-columns:repeat(${Math.min(ks.length, 6)},minmax(0,1fr))" role="group" aria-label="Projetos por status da legalização">${tiles}</div>
+<section style="display:flex;flex-direction:column;gap:14px">
+  <div class="sec-h"><div><p class="eyebrow">Projeto legal de Incêndio</p><h2 class="t">Situação da legalização</h2></div><a class="ver" href="#indicadores/legalizacao">Ver indicadores ${chevron}</a></div>
+  ${filtroTxt}
+  <div class="card tabela">
+    <div class="linha lgl cab"><span>Projeto</span><span class="c">Etapa</span><span class="c">Legalização</span><span class="c">Protocolo atual</span><span class="c">Previsão de retorno</span><span class="c">Aprovação</span><span class="c">Protocolos</span><span></span></div>
+    ${linhas || '<p class="vazio">Nenhum projeto com esse filtro.</p>'}
+  </div>
+</section>
+${blocoRetornos(doGrupo, 12)}
+</section>`;
+}
+
 // ====== Gráficos (status por projeto, legalização por projeto, disciplinas por status) ======
-let GRUPOS_GRAF_LEGAL = TODOS_LEGAL.map(([nome, , s]) => [nome, s[0], s]);
-const nomesLegal = () => { const n = GRUPOS_LEGAL.map((g) => g[0]); return n.length > 1 ? n.slice(0, -1).join(", ") + " e " + n.at(-1) : n[0]; };
+const nomesLegal = (gr = GRUPOS_LEGAL_COORD) => { const n = gr.map((g) => g[0]); return n.length > 1 ? n.slice(0, -1).join(", ") + " e " + n.at(-1) : n[0]; };
 const ORD_ST = Object.keys(BARRA);
 // Infraestrutura fica só na legalização: não entra nos gráficos de status das disciplinas
 const SO_LEGAL = ["INF"];
@@ -877,7 +1156,7 @@ function barrasH(linhas, max) {
   const grade = marcas.map((i) => `<i style="left:${(i / max) * 100}%"></i>`).join("");
   const corpo = linhas.map(({ rotulo, href, segs, n }) => {
     const tag = href ? "a" : "div";
-    const barra = segs.map((s) => `<i class="sg" style="flex:${s.n || 1};background:${s.cor};color:${s.txt || "#121212"}" data-tip="${esc(s.tip)}">${s.rot ? `<span>${esc(s.rot)}</span>` : ""}</i>`).join("");
+    const barra = segs.map((s) => `<i class="sg" style="flex:${s.n || 1};background:${s.cor};color:${s.txt || "#1F1F1F"}" data-tip="${esc(s.tip)}">${s.rot ? `<span>${esc(s.rot)}</span>` : ""}</i>`).join("");
     return `<${tag} class="gh-l"${href ? ` href="${href}"` : ""}><span class="gh-r">${rotulo}</span><span class="gh-t"><span class="gh-s" style="width:${(n / max) * 100}%">${barra}</span><b class="gh-v" style="left:${(n / max) * 100}%">${n}</b></span></${tag}>`;
   }).join("");
   return `<div class="gh"><div class="gh-grade">${grade}</div>${corpo}<div class="gh-l gh-x"><span class="gh-r"></span><span class="gh-t">${marcas.map((i) => `<span style="left:${(i / max) * 100}%">${i}</span>`).join("")}</span></div></div>`;
@@ -901,12 +1180,12 @@ function grafStatusProjetos(projs) {
 }
 // 2) Legalização por projeto: Incêndio, Elétrico e Infraestrutura, na cor do status legal
 function legaisGraf(p) {
-  return GRUPOS_GRAF_LEGAL.map(([nome, sigla, s]) => { const l = legalDe(p, s); return l ? { nome, sigla, l } : null; }).filter(Boolean);
+  return (ehLegal(p) ? GRUPOS_LEGAL : GRUPOS_LEGAL_COORD).map(([nome, , s]) => { const l = legalDe(p, s); return l ? { nome, sigla: s[0], l } : null; }).filter(Boolean);
 }
 function segsLegal(p) { // agrupado por status, do mais avançado ao menos avançado
   const g = new Map();
   legaisGraf(p).forEach(({ nome, sigla, l }) => { const st = stLegal(l.status); const x = g.get(st[0]) || { st, nomes: [], siglas: [] }; x.nomes.push(nome); x.siglas.push(sigla); g.set(st[0], x); });
-  return [...g.values()].sort((a, b) => b.st[3] - a.st[3]).map(({ st, nomes, siglas }) => ({ cor: corLegal(st), txt: st[2] || "#121212", n: nomes.length, rot: siglas.join(" · "), tip: `${st[0]}: ${nomes.join(", ")}` }));
+  return [...g.values()].sort((a, b) => b.st[3] - a.st[3]).map(({ st, nomes, siglas }) => ({ cor: corLegal(st), txt: st[2] || "#1F1F1F", n: nomes.length, rot: siglas.join(" · "), tip: `${st[0]}: ${nomes.join(", ")}` }));
 }
 function legPresentes(projs) {
   const vistos = new Map();
@@ -962,16 +1241,50 @@ function blocoGraficosProjeto(p) {
   document.addEventListener("scroll", () => (tip.hidden = true), true);
 })();
 
+// Projeto só de Incêndio (v3): só etapas e legalização; sem disciplinas, entregas, pendências nem cronograma
+function pgProjetoLegal(p) {
+  const FL = fluxoDe(p), fim = finalizado(p), idx = fim ? FL.length : FL.indexOf(norm(p.etapa));
+  const passos = FL.map((k, i) => `<div class="passo ${i < idx ? "feito" : i === idx ? "atual" : ""}"><span class="bola">${i < idx ? "✓" : sig(k)}</span><div><b>${ETAPAS[k].nome}</b><br><small>${i < idx ? "Concluída" : i === idx ? "Etapa atual" : "Próxima"}</small></div></div>`).join("");
+  const l = legInc(p), k = l ? legKey(l.status) : "SEM";
+  const TXT = { "EM PRODUCAO": "O projeto legal está em elaboração pela EXP.", AGUARDANDO: "Depende de documento ou informação para seguir.", PROTOCOLADO: "O projeto foi entregue ao órgão e está em análise.", APROVADO: "O projeto foi aprovado pelo órgão.", PARADO: "Sem atividade no momento.", "NAO SE APLICA": "Não se aplica a este projeto.", SEM: "Ainda não há cartão de legalização no Notion.", OUTRO: "" };
+  const campo = (t, v) => `<div><dt>${t}</dt><dd class="num">${v}</dd></div>`, dash = '<span class="dash">—</span>';
+  const nP = l ? l.protocolos || 0 : 0;
+  const campos = [
+    campo("Protocolo atual", l && l.protocolo ? data(l.protocolo) : dash),
+    campo("Previsão de retorno", l && l.retorno && k === "PROTOCOLADO" ? `${data(l.retorno)} <small class="${diaN(l.retorno) < 0 ? "atr" : ""}">${quandoTxt(l.retorno)}</small>` : dash),
+    campo("Aprovação", l && l.aprovacao ? data(l.aprovacao) : dash),
+    campo("Protocolos realizados", nP ? `${nP} <small>${nP > 1 ? `atual: ${nP}º` : "primeiro protocolo"}</small>` : dash),
+  ].join("");
+  const comp = l && l.comprovante ? `<button class="btn-comp" data-comp="${slug(p)}" type="button">${icoDoc}<span>Ver comprovante ${k === "APROVADO" ? "de aprovação" : "de protocolo"}</span></button>` : "";
+  const irmaos = base().filter((x) => ehLegal(x)), i = irmaos.indexOf(p), ant = irmaos[i - 1], prx = irmaos[i + 1];
+  return `<section class="view">
+<nav class="trilha" aria-label="Você está em">${acesso === "gestao" ? `<a href="#legalizacao">Legalização</a><span>›</span>` : ""}<span>Projeto legal de Incêndio</span></nav>
+<header class="cabeca">
+  <h1>${nomeHtml(p)}</h1>
+  <div class="meta">${linhaTag(p)}<span>Legalização ${l ? pill(stLegal(l.status)) : '<span class="pill o">Sem cartão</span>'}</span><span>Etapa ${etq(p.etapa)} <b>${esc(etapa(p.etapa).nome)}</b></span></div>
+</header>
+<div class="card fluxo" aria-label="Fluxo de etapas" style="--n:${FL.length}">${passos}</div>
+<section class="card bloco legp"><header><div><p class="eyebrow">Incêndio</p><h2 class="t">Legalização</h2></div></header>
+  <p class="legp-t">${TXT[k] || ""}</p>
+  <dl class="legp-d"><div><dt>Etapa</dt><dd>${etq(p.etapa)} <span class="legp-n">${esc(etapa(p.etapa).nome)}</span></dd></div><div><dt>Status</dt><dd>${l ? pill(stLegal(l.status)) : '<span class="pill o">Sem cartão</span>'}</dd></div></dl>
+  <dl class="legp-g">${campos}</dl>
+  ${comp ? `<div class="legp-c">${comp}</div>` : ""}
+</section>
+<nav class="pager" aria-label="Outros projetos">${ant ? `<a href="#${slug(ant)}"><small>← Projeto anterior</small><b>${nomeHtml(ant)}</b></a>` : ""}${prx ? `<a class="prox" href="#${slug(prx)}"><small>Próximo projeto →</small><b>${nomeHtml(prx)}</b></a>` : ""}</nav>
+</section>`;
+}
 function pgProjeto(p, sub) {
-  const idx = FLUXO.indexOf(norm(p.etapa));
-  const passos = FLUXO.map((k, i) => `<div class="passo ${i < idx ? "feito" : i === idx ? "atual" : ""}"><span class="bola">${i < idx ? "✓" : sig(k)}</span><div><b>${ETAPAS[k].nome}</b><br><small>${i < idx ? "Concluída" : i === idx ? "Etapa atual" : "Próxima"}</small></div></div>`).join("");
+  if (ehLegal(p)) return pgProjetoLegal(p);
+  const FL = fluxoDe(p), fim = finalizado(p), idx = fim ? FL.length : FL.indexOf(norm(p.etapa));
+  const passos = FL.map((k, i) => `<div class="passo ${i < idx ? "feito" : i === idx ? "atual" : ""}"><span class="bola">${i < idx ? "✓" : sig(k)}</span><div><b>${ETAPAS[k].nome}</b><br><small>${i < idx ? "Concluída" : i === idx ? "Etapa atual" : "Próxima"}</small></div></div>`).join("");
   const ds = ordenarDisc(p.disciplinas);
   const linhas = ds.map((d) => {
     const m = disc(d.sigla), ent = data(d.entrega);
     return `<div class="dl"><span class="dn" style="color:${m.cor}">${icone(m.icone, m.cor)}<span>${esc(m.nome)}</span></span><span class="c">${etq(d.etapa)}</span><span class="c">${pill(stDisc(d.status))}</span><span class="ent num">${ent || '<span class="dash">—</span>'}</span></div>`;
   }).join("") || '<p class="vazio">Nenhuma disciplina cadastrada no Notion.</p>';
   const presentes = Object.keys(ETAPAS).filter((k) => ds.some((d) => norm(d.etapa) === k));
-  const gruposLegal = GRUPOS_LEGAL;
+  const gruposLegal = soIncendio(p) ? GRUPOS_LEGAL.filter(([, , g]) => legalDe(p, g)) : GRUPOS_LEGAL_COORD; // só Incêndio: não mostra os outros tipos vazios
+  const lg = ehLegal(p);
   const legais = gruposLegal.map(([nome, cor, s], i) => {
     const l = legalDe(p, s);
     return `<div class="leg"><div class="top"><b style="color:${cor}">${i + 1} · ${nome}</b>${l ? pill(stLegal(l.status)) : '<span class="pill o">Sem cartão</span>'}</div><dl><dt>Previsão de retorno</dt><dd class="num">${l && l.retorno ? data(l.retorno) : '<span class="dash">—</span>'}</dd></dl>${l && l.incluiSBE ? '<p class="obs">Inclui a Subestação (SBE).</p>' : ""}</div>`;
@@ -986,32 +1299,33 @@ function pgProjeto(p, sub) {
     : g.exigido ? `<li class="p">${aberto("#E8901C")}<span>${esc(nomeItem(r.item))}</span><em>Pendente</em></li>`
     : `<li class="f">${aberto("#B9B9B0")}<span>${esc(nomeItem(r.item))}</span></li>`).join("")}</ul></div>`).join("")
     : pend.length ? `<ul class="lista">${pend.map((x) => `<li class="p">${aberto("#E8901C")}<span>${esc(x)}</span><em>Pendente</em></li>`).join("")}</ul>` : "";
-  const prox = idx >= 0 && idx < 3 ? `Próxima etapa: ${ETAPAS[FLUXO[idx + 1]].nome}` : idx === 3 ? "Etapa final: Projeto Executivo" : "";
+  const prox = fim ? "Projeto finalizado: legalização de Incêndio aprovada." : idx >= 0 && idx < FL.length - 1 ? `Próxima etapa: ${ETAPAS[FL[idx + 1]].nome}` : idx === FL.length - 1 ? `Etapa final: ${ETAPAS[FL[idx]].nome}` : "";
   const total = gs.reduce((n, g) => n + g.itens.length, 0), feitos = gs.reduce((n, g) => n + g.feitos, 0);
-  const resumo = `<div class="resumo">${pend.length ? `<span class="pill" style="background:var(--warn);color:#121212">${pend.length} pendente${pend.length > 1 ? "s" : ""}</span>` : `<span class="pill" style="background:var(--lime);color:#121212">Liberado</span>`}${total ? `<span class="pill o">${feitos}/${total} concluídas</span>` : ""}</div>`;
+  const resumo = `<div class="resumo">${pend.length ? `<span class="pill" style="background:var(--warn);color:#1F1F1F">${pend.length} pendente${pend.length > 1 ? "s" : ""}</span>` : `<span class="pill" style="background:var(--lime);color:#1F1F1F">${fim ? "Finalizado" : "Liberado"}</span>`}${total ? `<span class="pill o">${feitos}/${total} concluídas</span>` : ""}</div>`;
 
-  const irmaos = base().filter((x) => !COM_ANA || x.analista === p.analista), i = irmaos.indexOf(p), ant = irmaos[i - 1], prx = irmaos[i + 1], an = anaDe(p.analista), deAna = COM_ANA ? ` de ${esc(an.nome)}` : "";
+  const irmaos = base().filter((x) => (!COM_ANA || x.analista === p.analista) && ehLegal(x) === lg), i = irmaos.indexOf(p), ant = irmaos[i - 1], prx = irmaos[i + 1], an = anaDe(p.analista), deAna = COM_ANA ? ` de ${esc(an.nome)}` : "";
   const [sr] = stDisc(p.status);
   return `<section class="view">
-<nav class="trilha" aria-label="Você está em">${acesso === "gestao" ? `<a href="#coordenacao">Coordenação</a><span>›</span>` : ""}${COM_ANA ? `<a href="#a-${an.id}">${esc(an.nome)}</a><span>›</span>` : ""}<span>Projeto</span></nav>
+<nav class="trilha" aria-label="Você está em">${acesso === "gestao" ? `<a href="#${grupoProj(p)}">${nomeGrupo(p)}</a><span>›</span>` : ""}${COM_ANA ? `<a href="#a-${an.id}">${esc(an.nome)}</a><span>›</span>` : ""}<span>${lg ? "Projeto legal de Incêndio" : "Projeto"}</span></nav>
 <header class="cabeca">
   <h1>${nomeHtml(p)}</h1>
   <div class="meta">${linhaTag(p)}${COM_ANA ? `<span>Analista <a href="#a-${an.id}" style="font-weight:700">${esc(an.nome)}</a></span>` : ""}<span>Status geral ${pill(stDisc(p.status))}</span><span>Etapa global ${etq(p.etapa)} <b>${esc(etapa(p.etapa).nome)}</b></span></div>
 </header>
-${subAbas(slug(p), sub)}
+${subAbas(slug(p), sub, lg ? "Legalização" : "")}
 ${sub === "indicadores" ? `${blocoGraficosProjeto(p)}
 <section class="card gcard"><div class="gcab"><h2 class="t">Cronograma do projeto</h2><p class="nota">Etapa global do projeto e cada disciplina, pela data de início adotada e pela data de entrega do Notion.</p></div>${gantt([p], true)}</section>` : `
-<div class="card fluxo" aria-label="Fluxo de etapas">${passos}</div>
-<div class="duas">
-  <section class="card bloco"><header><h2 class="t">Disciplinas</h2><small class="num">${postadas(p)} de ${ds.length} postadas</small></header>
+<div class="card fluxo" aria-label="Fluxo de etapas" style="--n:${FL.length}">${passos}</div>
+${(() => {
+  const cDisc = `<section class="card bloco"><header><h2 class="t">${lg ? "Projeto de Incêndio" : "Disciplinas"}</h2><small class="num">${postadas(p)} de ${ds.length} postada${ds.length === 1 ? "" : "s"}</small></header>
     <div class="disc"><div class="dl cab"><span>Disciplina</span><span class="c">Etapa</span><span class="c">Status</span><span class="ent">Próxima entrega</span></div>${linhas}</div>
     ${presentes.length ? `<p class="legetapas">${presentes.map((k) => `<span><b>${sig(k)}</b> ${ETAPAS[k].nome}</span>`).join("")}</p>` : ""}
-  </section>
-  <section class="card bloco"><header><h2 class="t">Legalização</h2></header>${legais}</section>
-</div>
+  </section>`;
+  const cLeg = `<section class="card bloco"><header><h2 class="t">Legalização</h2></header>${legais}</section>`;
+  return lg ? `<div class="duas lg">${cLeg}${cDisc}</div>` : `<div class="duas">${cDisc}${cLeg}</div>`; // só Incêndio: a legalização vem primeiro
+})()}
 <section class="card pend"><header><div><h2 class="t">Pendências por etapa</h2><p>${prox}</p></div>${resumo}</header>
   ${blocosPend}
-  ${!pend.length ? `<p class="liberado">${check("#DDDB00", 22)}Sem pendências: projeto liberado para a próxima etapa.</p>` : ""}
+  ${!pend.length ? `<p class="liberado">${check("#DDDB00", 22)}${fim ? "Projeto finalizado: o Incêndio foi aprovado." : "Sem pendências: projeto liberado para a próxima etapa."}</p>` : ""}
 </section>`}
 <nav class="pager" aria-label="Outros projetos">${ant ? `<a href="#${slug(ant)}${sub ? "/" + sub : ""}"><small>← Projeto anterior${deAna}</small><b>${nomeHtml(ant)}</b></a>` : ""}${prx ? `<a class="prox" href="#${slug(prx)}${sub ? "/" + sub : ""}"><small>Próximo projeto${deAna} →</small><b>${nomeHtml(prx)}</b></a>` : ""}</nav>
 </section>`;
@@ -1020,9 +1334,11 @@ ${sub === "indicadores" ? `${blocoGraficosProjeto(p)}
 function pgSobre() {
   return `<section class="view">
 <div class="card sobre">
-  <div class="arte" style="--pos:${CFG.sobre.pos || "right bottom"}"><img class="fundo" src="${CFG.sobre.fundo}" alt=""><img class="predio" src="${CFG.sobre.predio}" alt="${esc(CFG.sobre.alt)}"></div>
+  ${CFG.sobre.trelica ? `<div class="arte trel"><img src="trelica.png" alt=""></div>` // sem render: X treliçado da EXP, como na v1
+    : `<div class="arte${CFG.sobre.equipe ? " equipe" : ""}" style="--pos:${CFG.sobre.pos || "right bottom"}"><img class="fundo" src="${CFG.sobre.fundo}" alt=""><img class="predio" src="${CFG.sobre.predio}" alt="${esc(CFG.sobre.alt)}"></div>`}
   <div class="txt">
     <div class="missao"><h1>Missão</h1><p>${esc(MISSAO)}</p></div>
+    <div class="numeros">${NUMEROS_EXP.map(([n, t]) => `<div><b class="num">${n}</b><span>${t}</span></div>`).join("")}</div>
     <img class="logo so-claro" src="logo-exp-tagline.png" alt="EXP BR · Projete com experts."><img class="logo so-escuro" src="logo-exp-tagline-branco.png" alt="EXP BR · Projete com experts.">
     <a class="site" href="${SITE_EXP}" target="_blank" rel="noopener">${esc(SITE_EXP.replace(/^https?:\/\//, ""))} ${chevron}</a>
   </div>
@@ -1045,19 +1361,22 @@ const icoCoord = `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="curre
 const icoInd = `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h8M7 11h12M7 6h3"/></svg>`;
 // ====== Registro de abas ======
 // Para criar uma aba nova: acrescente uma linha aqui com [id, nome, ícone, página]. Menu, celular e rotas se ajustam sozinhos.
+const icoDoc = `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>`;
+const icoLegal = `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>`;
 const ABAS = [
   ["inicio", "Início", icoInicio, () => pgInicio()],
   ["coordenacao", "Coordenação", icoCoord, () => pgGeral()],
-  ["indicadores", "Indicadores", icoInd, () => pgIndicadores()],
+  ...(CFG.abaLegal ? [["legalizacao", "Legalização", icoLegal, () => pgLegal()]] : []),
+  ["indicadores", "Indicadores", icoInd, (r) => pgIndicadores(null, r && r.sub)],
 ];
 // Abas dentro da pasta do analista e do projeto: [id, nome, ícone, página do analista, página do projeto]
 const SUBABAS = [
   ["", "Coordenação", icoCoord, (a) => pgGeral(a), (p) => pgProjeto(p, "")],
   ["indicadores", "Indicadores", icoInd, (a) => pgIndicadores(a), (p) => pgProjeto(p, "indicadores")],
 ];
-function subAbas(base, sub) {
-  return `<nav class="subabas" aria-label="Abas">${SUBABAS.map(([id, t, i]) =>
-    `<a href="#${base}${id ? "/" + id : ""}" class="aba"${(sub || "") === id ? ' aria-current="page"' : ""}>${i}<span>${t}</span></a>`).join("")}</nav>`;
+function subAbas(base, sub, nome0) { // nome0: rótulo da primeira aba (ex.: "Legalização" nos projetos só de Incêndio)
+  return `<nav class="subabas" aria-label="Abas">${SUBABAS.map(([id, t, i], n) =>
+    `<a href="#${base}${id ? "/" + id : ""}" class="aba"${(sub || "") === id ? ' aria-current="page"' : ""}>${n === 0 && nome0 ? icoLegal : i}<span>${n === 0 && nome0 ? nome0 : t}</span></a>`).join("")}</nav>`;
 }
 const carimbo = () => { const q = new Date(DADOS.atualizado || Date.now()); return `${q.toLocaleDateString("pt-BR")} às ${q.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`; };
 const selo = () => `<span class="stamp claro"><span class="dot ${fonte.tipo}"></span>Atualizado em ${carimbo()}<small>· ${fonte.tipo === "vivo" ? "Notion" : "dados de exemplo"}</small></span>`;
@@ -1071,6 +1390,7 @@ const icoOk = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const icoBrilho = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.13 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0z"/><path d="M20 3v4M22 5h-4"/></svg>`;
 // Pontos que pedem ação: entregas atrasadas, etapas com prazo vencido, pendências para a próxima etapa
 function pontosAtencao(ps) {
+  ps = ps.filter((p) => !ehLegal(p)); // projetos só de Incêndio não expõem entregas nem prazos
   const hoje = hojeISO(), itens = [];
   const atrasadas = proximas(ps).filter((it) => diaN(it.d.entrega) < 0);
   const porProj = new Map(); atrasadas.forEach(({ p }) => porProj.set(p, (porProj.get(p) || 0) + 1));
@@ -1087,12 +1407,31 @@ function blocoAtencao(ps) {
   <p class="nota">${comPend} projeto${comPend === 1 ? "" : "s"} com pendências para a próxima etapa. Cada pendência aparece na página do projeto.</p></section>`;
 }
 // Como lemos o andamento: etapas e status em linguagem simples
+// Início com foco em legalização: quantos projetos em cada status, por tipo (Incêndio, Elétrico...)
+function blocoLegalInicio(ps) {
+  const linhas = GRUPOS_LEGAL.map(([nome, cor, s]) => {
+    const cont = new Map(); ps.forEach((p) => { const l = legalDe(p, s); if (l) { const st = stLegal(l.status); const x = cont.get(st[0]) || { st, n: 0 }; x.n++; cont.set(st[0], x); } });
+    if (!cont.size) return "";
+    const tot = [...cont.values()].reduce((a, b) => a + b.n, 0);
+    return `<div class="lg-ini"><b style="color:${cor}">${nome}</b><span class="lg-ini-n">${tot} projeto${tot > 1 ? "s" : ""}</span><div class="lg-ini-s">${[...cont.values()].sort((a, b) => b.st[3] - a.st[3]).map(({ st, n }) => `<span>${pill(st)}<b class="num">${n}</b></span>`).join("")}</div></div>`;
+  }).join("");
+  return linhas ? `<section class="card bloco"><header><h2 class="t">Legalização</h2><a class="ver" href="#indicadores">Ver gráfico ${chevron}</a></header>${linhas}</section>` : "";
+}
 function blocoComoFunciona() {
-  const etapas = [["EP", "As soluções de cada disciplina ganham seus primeiros traços."], ["AP", "O projeto é modelado e as disciplinas são compatibilizadas entre si."], ["PB", "O modelo é ajustado e os quantitativos são levantados."], ["EX", "Os últimos ajustes são feitos e o projeto é detalhado por completo."]];
+  const TXT = { EP: "As soluções de cada disciplina ganham seus primeiros traços.", AP: "O projeto é modelado e as disciplinas são compatibilizadas entre si.", PB: "O modelo é ajustado e os quantitativos são levantados.",
+    EX: "Os últimos ajustes são feitos e o projeto é detalhado por completo.", PL: "O projeto é preparado e levado à aprovação nos órgãos responsáveis.", LO: "O projeto está concluído e liberado para a obra." };
+  const etapas = FLUXO.map((k) => [k, TXT[k] || ""]);
   const st = [["POSTADO", "Entregue a vocês."], ["EM PRODUCAO", "Nossa equipe está desenvolvendo."], ["AGUARDANDO", "Depende de uma informação ou validação."], ["PAUSADO", "Interrompido por enquanto."], ["PARADO", "Sem atividade no momento."]];
+  const lgs = [["EM PRODUCAO", "Projeto legal em elaboração pela EXP."], ["AGUARDANDO", "Depende de documento ou informação para seguir."], ["PROTOCOLADO", "Entregue ao órgão e em análise."], ["APROVADO", "Aprovado pelo órgão. Projeto só de Incêndio finalizado."]];
   return `<section class="card bloco como"><header><h2 class="t">Como acompanhar</h2><small>etapas e status, em poucas palavras</small></header>
+  <div class="como-g"><div class="como-c">
+  <p class="como-t">Etapas</p>
   <ol class="fluxo-s">${etapas.map(([k, t]) => `<li><span class="etq" style="background:${etapa(k).cor}">${sig(k)}</span><b>${esc(etapa(k).nome)}</b><small>${esc(t)}</small></li>`).join("")}</ol>
-  <ul class="st-s">${st.map(([k, t]) => `<li>${pill(stDisc(k))}<span>${esc(t)}</span></li>`).join("")}</ul></section>`;
+  ${CFG.abaLegal ? `<p class="como-n">Projetos só de Incêndio seguem <b>${sig("EP")} → ${sig("PL")}</b> e terminam com a aprovação.</p>` : ""}
+  </div><div class="como-c">
+  <p class="como-t">Status das disciplinas</p>
+  <ul class="st-s">${st.map(([k, t]) => `<li>${pill(stDisc(k))}<span>${esc(t)}</span></li>`).join("")}</ul>
+  ${CFG.abaLegal ? `<p class="como-t">Status da legalização</p><ul class="st-s">${lgs.map(([k, t]) => `<li>${pill(LEGAL[k])}<span>${esc(t)}</span></li>`).join("")}</ul>` : ""}</div></div></section>`;
 }
 
 // ====== Expertinho: o assistente do painel ======
@@ -1116,7 +1455,15 @@ const MENU = () => {
   return op;
 };
 function porQuem() { const q = quem(); return COM_ANA && q && q !== "todos" ? ANAS.find((a) => a.id === q) : null; }
+function resumoLegal(p) {
+  const l = legInc(p), k = l ? legKey(l.status) : "SEM";
+  const ret = l && l.retorno && k === "PROTOCOLADO" ? ` Retorno previsto em ${data(l.retorno)} (${quandoTxt(l.retorno)}).` : "";
+  const prot = l && l.protocolo ? `<br>Protocolo atual: ${data(l.protocolo)}${l.protocolos > 1 ? ` (${l.protocolos}º protocolo)` : ""}.` : "";
+  const apr = l && l.aprovacao ? `<br>Aprovado em ${data(l.aprovacao)}.` : "";
+  return `<b>${lnk(p)}</b> é um projeto legal de Incêndio, em <b>${sig(norm(p.etapa))} · ${esc(etapa(p.etapa).nome)}</b>.<br>Legalização: <b>${esc(rotLeg(k).toLowerCase())}</b>.${ret}${prot}${apr}`;
+}
 function resumoProjeto(p) {
+  if (ehLegal(p)) return resumoLegal(p);
   const ds = discGraf(p), cont = {};
   ds.forEach((d) => { const k = stKey(d.status); cont[k] = (cont[k] || 0) + 1; });
   const sts = ORD_ST.filter((k) => cont[k] && k !== "POSTADO").map((k) => { const t = stDisc(k)[0].toLowerCase(); return `${cont[k]} ${cont[k] > 1 && /o$/.test(t) ? t + "s" : t}`; }).join(", ");
@@ -1135,10 +1482,10 @@ function acao(a) {
   const doAna = (id) => (id ? ps.filter((x) => x.analista === id) : ps);
   const voltar = ["Ver outras perguntas", "menu"];
   if (tipo === "menu") return ["Claro! O que você quer saber?", MENU()];
-  if (tipo === "proj") { const p = PROJS.find((x) => slug(x) === arg); return p ? [resumoProjeto(p), [["Pendências deste projeto", "pend:" + arg], ["Abrir o projeto", "abrir:" + arg], voltar]] : ["Não encontrei esse projeto.", MENU()]; }
+  if (tipo === "proj") { const p = PROJS.find((x) => slug(x) === arg); return p ? [resumoProjeto(p), [...(ehLegal(p) ? [] : [["Pendências deste projeto", "pend:" + arg]]), ["Abrir o projeto", "abrir:" + arg], voltar]] : ["Não encontrei esse projeto.", MENU()]; }
   if (tipo === "pend") { const p = PROJS.find((x) => slug(x) === arg), l = p ? pendentes(p) : [];
     return [l.length ? `Para liberar a próxima etapa de ${lnk(p)}, faltam:<br>${l.map((x) => `• ${esc(nomeItem(x))}`).join("<br>")}` : `${lnk(p)} não tem pendências para a próxima etapa.`, [["Abrir o projeto", "abrir:" + arg], voltar]]; }
-  if (tipo === "abrir") { location.hash = arg; return ["Abri a página do projeto para você.", [voltar]]; }
+  if (tipo === "abrir") { location.hash = arg; const ab = { legalizacao: "Abri a aba Legalização.", "indicadores/legalizacao": "Abri os indicadores da legalização." }[arg]; return [ab || "Abri a página do projeto para você.", [voltar]]; }
   if (tipo === "escolher" && !COM_ANA) return ["Qual projeto?", ps.map((p) => [p.nome, "proj:" + slug(p)])];
   if (tipo === "escolher") { const eu = porQuem();
     if (eu) return [`Qual projeto? Estes são os seus, ${esc(eu.nome)}:`, [...doAna(eu.id).map((p) => [p.nome, "proj:" + slug(p)]), ["Ver de outro analista", "escolher-todos"]]];
@@ -1148,7 +1495,8 @@ function acao(a) {
   if (tipo === "resumo" || tipo === "resumo-ana") { const l = doAna(ana && ana.id), eu = porQuem();
     const et = FLUXO.map((k) => [k, l.filter((x) => norm(x.etapa) === k).length]).filter(([, n]) => n).map(([k, n]) => `${n} em ${sig(k)}`).join(", ");
     const at = pontosAtencao(l).length, pr = proximas(l).filter((it) => diaN(it.d.entrega) >= 0).length;
-    return [`${ana ? `<b>${esc(ana.nome)}</b> tem` : "Ao todo, são"} <b>${l.length} projetos</b>${et ? ` (${et})` : ""}.<br>${pr} entrega${pr === 1 ? "" : "s"} nas próximas 2 semanas e ${at} ponto${at === 1 ? "" : "s"} com data já passada.`,
+    const nl = CFG.abaLegal ? l.filter(ehLegal).length : 0, sep = nl ? ` São ${l.length - nl} em <a href="#coordenacao">Coordenação</a> (várias disciplinas) e ${nl} em <a href="#legalizacao">Legalização</a> (só Incêndio).` : "";
+    return [`${ana ? `<b>${esc(ana.nome)}</b> tem` : "Ao todo, são"} <b>${l.length} projetos</b>${et ? ` (${et})` : ""}.${sep}<br>${pr} entrega${pr === 1 ? "" : "s"} nas próximas 2 semanas e ${at} ponto${at === 1 ? "" : "s"} com data já passada.`,
       [!ana && eu ? [`Resumo dos projetos de ${eu.nome}`, "resumo-ana:" + eu.id] : null, ["O que está atrasado?", ana ? "atrasos-ana:" + ana.id : "atrasos"], ["Próximas entregas", ana ? "entregas-ana:" + ana.id : "entregas"], voltar].filter(Boolean)]; }
   if (tipo === "atrasos" || tipo === "atrasos-ana") { const it = pontosAtencao(doAna(ana && ana.id)), quemTxt = ana ? ` de ${esc(ana.nome)}` : "";
     return [it.length ? `Estes pontos${quemTxt} estão com a data prevista já passada:<br>${it.slice(0, 8).map((i) => `• ${lnk(i.p)}: ${esc(i.txt)}`).join("<br>")}${it.length > 8 ? `<br>e mais ${it.length - 8}.` : ""}` : `Nada atrasado${quemTxt}.`, [["Por que algo fica atrasado?", "porque"], voltar]]; }
@@ -1157,6 +1505,12 @@ function acao(a) {
     return [l.length ? `Próximas entregas${quemTxt} (2 semanas):<br>${l.slice(0, 8).map(({ p, d }) => `• ${data(d.entrega).slice(0, 5)} · ${lnk(p)} · ${esc(disc(d.sigla).nome)}`).join("<br>")}${l.length > 8 ? `<br>e mais ${l.length - 8}.` : ""}` : `Nenhuma entrega${quemTxt} nas próximas 2 semanas.`,
       ana || !COM_ANA ? [voltar] : [["Só de um analista", "entregas-escolher"], voltar]]; }
   if (tipo === "entregas-escolher") return ["De qual analista?", ANAS.filter((x) => ps.some((p) => p.analista === x.id)).map((x) => [x.nome, "entregas-ana:" + x.id])];
+  if (tipo === "legal" && CFG.abaLegal) { const lp = ps.filter(ehLegal), c = contLegal(lp);
+    const e = LEG_ORD.concat(["SEM"]).filter((k) => c[k]).map((k) => `• ${esc(rotLeg(k))}: ${c[k]}`).join("<br>");
+    const pr = lp.map((p) => ({ p, l: legInc(p) })).filter(({ l }) => l && legKey(l.status) === "PROTOCOLADO" && l.retorno && diaN(l.retorno) >= 0).sort((a, b) => a.l.retorno.localeCompare(b.l.retorno))[0];
+    const coordInc = ps.filter((p) => !ehLegal(p) && legInc(p)).length;
+    return [lp.length ? `Legalização de Incêndio (${lp.length} projeto${lp.length > 1 ? "s" : ""} só de Incêndio):<br>${e}${pr ? `<br>Próximo retorno previsto: ${lnk(pr.p)} em ${data(pr.l.retorno)}.` : ""}${coordInc ? `<br>A legalização dos projetos com várias disciplinas aparece na <a href="#coordenacao">Coordenação</a>.` : ""}` : "Ainda não há projetos só de Incêndio.",
+      [["Abrir a aba Legalização", "abrir:legalizacao"], ["Ver indicadores da legalização", "abrir:indicadores/legalizacao"], voltar]]; }
   if (tipo === "legal") { const cont = {}, tipos = new Set(); ps.forEach((x) => legaisGraf(x).forEach(({ nome, l }) => { tipos.add(nome); const k = stLegal(l.status)[0]; cont[k] = (cont[k] || 0) + 1; }));
     const e = Object.entries(cont).sort((a, b) => b[1] - a[1]), tl = [...tipos], tTxt = tl.length > 1 ? tl.slice(0, -1).join(", ") + " e " + tl.at(-1) : tl[0];
     return [e.length ? `Legalização (${esc(tTxt)}):<br>${e.map(([k, n]) => `• ${esc(k)}: ${n}`).join("<br>")}` : "Ainda não há cartões de legalização.", [["Ver o gráfico de legalização", "abrir:indicadores"], voltar]]; }
@@ -1171,7 +1525,7 @@ function interpretar(q) {
   if (p) return "proj:" + slug(p);
   if (/ATRAS|VENCID|PASSAD/.test(t)) return ana ? "atrasos-ana:" + ana.id : "atrasos";
   if (/ENTREG|SEMANA|PROXIM|POSTA/.test(t)) return ana ? "entregas-ana:" + ana.id : "entregas";
-  if (/LEGAL|PROTOCOL|APROVA|BOMBEIRO/.test(t)) return "legal";
+  if (/LEGAL|PROTOCOL|APROVA|BOMBEIRO|RETORNO|ANALISE/.test(t)) return "legal";
   if (ana || /RESUMO|GERAL|VISAO|ANDAMENTO|TUDO/.test(t)) return ana ? "resumo-ana:" + ana.id : "resumo";
   if (/PROJETO/.test(t)) return "escolher";
   return null;
@@ -1227,41 +1581,90 @@ function pgInicio() {
     const quando = n < 0 ? `atrasada há ${-n} dia${n < -1 ? "s" : ""}` : n === 0 ? "hoje" : n === 1 ? "amanhã" : `em ${n} dias`;
     return `<a class="mini-e${n < 0 ? " atr" : ""}" href="#${slug(p)}"><span class="md num"><b>${d.entrega.slice(8, 10)}/${d.entrega.slice(5, 7)}</b><small>${quando}</small></span><span class="mn"><b>${esc(p.nome)}</b><small style="color:${m.cor}">${esc(m.nome)}${eu || !COM_ANA ? "" : ` <i>· ${esc(anaDe(p.analista).nome)}</i>`}</small></span>${etq(d.etapa)}</a>`; };
   const lista = [...atrasadas.slice(0, 3), ...futuras.slice(0, 7 - Math.min(3, atrasadas.length))].map(linha).join("");
-  const escolha = COM_ANA && !q ? `<section class="card quem"><div><h2 class="t">Quem está acessando?</h2><p>Escolha seu nome para o painel mostrar primeiro os seus projetos. Fica guardado só neste navegador e dá para trocar quando quiser.</p></div>
-  <div class="quem-op">${anas.map((a) => `<button data-quem="${a.id}">${icoPasta}${esc(a.nome)}</button>`).join("")}<button class="todos" data-quem="todos">Ver todos os projetos</button></div></section>` : "";
+  // Sempre no Início (com analistas): os botões não mudam, só o escolhido ganha contorno azul. Para trocar, volta-se ao Início
+  const escolha = COM_ANA ? `<section class="card quem"><div><h2 class="t">Quem está acessando?</h2><p>Escolha seu nome para o painel mostrar primeiro os seus projetos. Fica guardado só neste navegador; para trocar, volte aqui no Início.</p></div>
+  <div class="quem-op">${anas.map((a) => `<button data-quem="${a.id}" aria-pressed="${q === a.id}">${icoPasta}${esc(a.nome)}</button>`).join("")}<button class="todos" data-quem="todos" aria-pressed="${q === "todos"}">Ver todos os projetos</button></div></section>` : "";
   return `<section class="view inicio">
 <header class="boas">
   <div class="par"><img class="lg-exp so-claro" src="logo-exp-tagline.png" alt="EXP BR · Projete com experts."><img class="lg-exp so-escuro" src="logo-exp-tagline-branco.png" alt="EXP BR · Projete com experts."><span class="vezes">×</span>${CFG.logos}</div>
   <h1>Bem-vindos, <span>${clientes.map(esc).join(" e ")}</span>.</h1>
   <p class="lead">Este é o <b class="seu">seu</b> espaço da EXP para acompanharmos juntos cada projeto da nossa parceria: o andamento das disciplinas, as próximas entregas, a legalização e os indicadores de produção.</p>
-  ${eu ? `<p class="ola">Olá, <b>${esc(eu.nome)}</b>! Seus ${ps.length} projetos aparecem primeiro. <a href="#" data-quem="">Não é você?</a></p>` : COM_ANA && q === "todos" ? `<p class="ola">Mostrando todos os projetos. <a href="#" data-quem="">Escolher meu nome</a></p>` : ""}
+  ${eu ? `<p class="ola">Olá, <b>${esc(eu.nome)}</b>! Seus ${ps.length} projetos aparecem primeiro.</p>` : COM_ANA && q === "todos" ? `<p class="ola">Mostrando todos os projetos.</p>` : ""}
   ${selo()}
 </header>
 ${escolha}
-<div class="kpis4">${kpi(ps.length, `${seus}projetos acompanhados`)}${kpi(futuras.length, "entregas nas próximas 2 semanas")}${kpi(atrasadas.length, "entregas atrasadas", "data prevista já passou")}${kpi(comPend, "projetos com pendências", "para a próxima etapa")}</div>
+${CFG.abaLegal ? `<div class="kpis4">${kpi(ps.filter((p) => !ehLegal(p)).length, "projetos em coordenação", "várias disciplinas")}${kpi(ps.filter(ehLegal).length, "projetos de legalização", "Incêndio")}${kpi(futuras.length, "entregas nas próximas 2 semanas")}${kpi(atrasadas.length, "entregas atrasadas", "data prevista já passou")}</div>
+<div class="rs-duas">${cardResumoCoord(ps.filter((p) => !ehLegal(p)))}${cardResumoLegal(ps.filter(ehLegal))}</div>
+<div class="atalhos dois">
+  ${atalho("#indicadores", icoInd, "Indicadores", "Cronograma de produção e gráficos, separados por Coordenação e Legalização")}
+  ${atalho("#sobre", icoSobre, "Sobre a EXP", "Quem somos e como trabalhamos")}
+</div>`
+  : `<div class="kpis4">${kpi(ps.length, `${seus}projetos acompanhados`)}${kpi(futuras.length, "entregas nas próximas 2 semanas")}${kpi(atrasadas.length, "entregas atrasadas", "data prevista já passou")}${kpi(comPend, "projetos com pendências", "para a próxima etapa")}</div>
+${CFG.focoLegal ? blocoLegalInicio(ps) : ""}
 <div class="atalhos">
   ${atalho(eu ? "#a-" + eu.id : "#coordenacao", icoCoord, "Coordenação", eu ? "Andamento, entregas e pendências dos seus projetos" : COM_ANA ? "Andamento, entregas e pendências por analista e por projeto" : "Andamento, entregas e pendências de cada projeto")}
   ${atalho(eu ? "#a-" + eu.id + "/indicadores" : "#indicadores", icoInd, "Indicadores", "Cronograma de produção e gráficos de status")}
   ${atalho("#sobre", icoSobre, "Sobre a EXP", "Quem somos e como trabalhamos")}
-</div>
-<div class="duas-i3">
-  <section class="card bloco"><header><h2 class="t">Próximas entregas</h2><a class="ver" href="${eu ? "#a-" + eu.id : "#coordenacao"}">Ver todas ${chevron}</a></header><div class="mini-lista">${lista || '<p class="vazio">Nenhuma entrega programada nas próximas 2 semanas.</p>'}</div>
+</div>`}
+<section class="card bloco"><header><div><p class="eyebrow">Coordenação</p><h2 class="t">Próximas entregas</h2></div><a class="ver" href="${eu ? "#a-" + eu.id : "#coordenacao"}">Ver todas ${chevron}</a></header><div class="mini-lista">${lista || '<p class="vazio">Nenhuma entrega programada nas próximas 2 semanas.</p>'}</div>
 </section>
-  ${blocoComoFunciona()}
-</div>
+${blocoComoFunciona()}
 </section>`;
 }
 
+// ====== Início (v3): resumo das duas frentes ======
+function cardResumoCoord(ps) {
+  const ds = ps.flatMap(discGraf), seg = {};
+  ds.forEach((d) => { const k = stKey(d.status); seg[k] = (seg[k] || 0) + 1; });
+  const barra = ORD_ST.filter((k) => seg[k]).map((k) => `<i style="flex:${seg[k]};background:${BARRA[k]}" data-tip="${esc(`${stDisc(k)[0]}: ${seg[k]}`)}"></i>`).join("");
+  const post = ds.filter((d) => stNorm(d.status) === "POSTADO").length;
+  const et = FLUXO.map((k) => [k, ps.filter((p) => norm(p.etapa) === k).length]);
+  return `<a class="card rs" href="#coordenacao"><div class="rs-h"><span class="ai">${icoCoord}</span><div><p class="eyebrow">Projetos com várias disciplinas</p><h2 class="t">Coordenação</h2></div><b class="num rs-n">${ps.length}</b></div>
+  <p class="rs-d">Instalações prediais coordenadas pela EXP, disciplina a disciplina, do estudo preliminar à liberação para obra.</p>
+  <div class="rs-et">${et.map(([k, n]) => `<span class="${n ? "" : "z"}" title="${esc(ETAPAS[k].nome)}"><span class="etq" style="background:${ETAPAS[k].cor}">${sig(k)}</span><b class="num">${n}</b></span>`).join("")}</div>
+  ${ds.length ? `<div class="rs-bar"><span class="b">${barra}</span><small><b class="num">${post}/${ds.length}</b> disciplinas postadas</small></div>` : ""}
+  <span class="rs-ver">Abrir Coordenação ${chevron}</span></a>`;
+}
+function cardResumoLegal(ps) {
+  const c = contLegal(ps), ks = LEG_ORD.concat(["SEM"]).filter((k) => c[k]);
+  const barra = ks.map((k) => `<i style="flex:${c[k]};background:${corLeg(k)}" data-tip="${esc(`${rotLeg(k)}: ${c[k]}`)}"></i>`).join("");
+  const pr = ps.map((p) => ({ p, l: legInc(p) })).filter(({ l }) => l && legKey(l.status) === "PROTOCOLADO" && l.retorno && diaN(l.retorno) >= 0).sort((a, b) => a.l.retorno.localeCompare(b.l.retorno))[0];
+  return `<a class="card rs" href="#legalizacao"><div class="rs-h"><span class="ai">${icoLegal}</span><div><p class="eyebrow">Projetos só de Incêndio</p><h2 class="t">Legalização</h2></div><b class="num rs-n">${ps.length}</b></div>
+  <p class="rs-d">Projeto legal de Incêndio, do desenvolvimento ao protocolo e à aprovação no órgão.</p>
+  <div class="rs-st">${ks.map((k) => `<span>${pill(LEGAL[k] || [rotLeg(k)])}<b class="num">${c[k]}</b></span>`).join("")}</div>
+  ${ps.length ? `<div class="rs-bar"><span class="b">${barra}</span><small>${pr ? `Próximo retorno: <b>${esc(pr.p.nome)}</b> em ${data(pr.l.retorno).slice(0, 5)}` : `<b class="num">${c.APROVADO || 0}/${ps.length}</b> aprovados`}</small></div>` : ""}
+  <span class="rs-ver">Abrir Legalização ${chevron}</span></a>`;
+}
+
 // ====== Indicadores ======
-function pgIndicadores(a) {
-  const ps = base().filter((p) => (!a || p.analista === a.id) && visivel(p));
+function pgIndicadores(a, vista) {
+  const legal = !a && CFG.abaLegal && vista === "legalizacao";
+  const sep = !a && CFG.abaLegal;
+  const ps = base().filter((p) => (!a || p.analista === a.id) && visivel(p) && (!sep || ehLegal(p) === legal));
+  const nC = sep ? projsCoord().filter(visivel).length : 0, nL = sep ? projsLegal().filter(visivel).length : 0;
+  const seg = sep ? `<nav class="seg" aria-label="Indicadores de"><a href="#indicadores"${legal ? "" : ' aria-current="page"'}>${icoCoord}Coordenação <small class="num">${nC}</small></a><a href="#indicadores/legalizacao"${legal ? ' aria-current="page"' : ""}>${icoLegal}Legalização <small class="num">${nL}</small></a></nav>` : "";
   const cab = a ? `<nav class="trilha" aria-label="Você está em"><a href="#coordenacao">Coordenação</a><span>›</span><span>Analistas</span></nav>
 <header class="cab-ana"><h1>${icoPasta}${esc(a.nome)}</h1><div class="meta"><span>Analista · ${ps.length} projeto${ps.length === 1 ? "" : "s"}</span></div></header>${subAbas("a-" + a.id, "indicadores")}`
-    : cabMin(`Indicadores · ${ps.length} projetos`, "Indicadores");
-  return `<section class="view">${cab}
-<section class="graficos"><div class="sec-h"><div><p class="eyebrow">Linha do tempo</p><h2 class="t">Cronograma de produção</h2></div></div>
+    : cabMin(`Indicadores${sep ? (legal ? " · Legalização" : " · Coordenação") : ""} · ${ps.length} projetos`, "Indicadores");
+  return `<section class="view">${cab}${seg}
+<section class="graficos"><div class="sec-h"><div><p class="eyebrow">Linha do tempo</p><h2 class="t">${legal ? "Cronograma da legalização" : "Cronograma de produção"}</h2></div></div>
   <div class="card gcard">${gantt(ps, false, !a && COM_ANA)}</div></section>
-${blocoGraficos(ps)}
+${legal ? blocoGraficosLegal(ps) : blocoGraficos(ps)}
+</section>`;
+}
+// Indicadores da Legalização: quantos projetos em cada status (legal e do projeto de Incêndio)
+function blocoGraficosLegal(ps) {
+  if (!ps.length) return '<p class="vazio">Nenhum projeto só de Incêndio com esse filtro.</p>';
+  const c = contLegal(ps), ks = LEG_ORD.concat(["SEM"]).filter((k) => c[k]);
+  const max = Math.max(1, ...ks.map((k) => c[k]));
+  const nomes = (k) => ps.filter((p) => kLegal(p) === k).map((p) => p.nome).join(", ");
+  const g1 = barrasH(ks.map((k) => ({ rotulo: `<b>${esc(rotLeg(k))}</b>`, segs: [{ cor: corLeg(k), n: c[k], tip: `${rotLeg(k)} (${c[k]}): ${nomes(k)}` }], n: c[k] })), max);
+  return `<section class="graficos">
+  <div class="sec-h"><div><p class="eyebrow">Visão gráfica</p><h2 class="t">Legalização em gráficos</h2></div><p class="nota">Passe o mouse (ou toque) nas barras para ver os projetos.</p></div>
+  <div class="duas-g">
+    <div class="card gcard"><h3 class="gt">Status da legalização</h3><p class="gsub">Projetos por status no órgão</p>${g1}</div>
+    ${blocoRetornos(ps, 20)}
+  </div>
 </section>`;
 }
 
@@ -1301,11 +1704,11 @@ function gantt(projs, umProjeto, comFiltro) {
   const linhas = itens.map((i) => {
     const e = estado(i), w = Math.max(x(i.fim) - x(i.inicio) + px, 6);
     const nome = esc(umProjeto ? i.rot : i.p.nome);
-    const tip = `${umProjeto ? i.rot : i.p.nome} · ${sig(i.k)} ${etapa(i.k).nome}: ${data(i.inicio)} → ${data(i.fim)}${e === "atrasada" ? " (prazo vencido)" : e === "feita" && umProjeto ? " (postado)" : ""}`;
+    const tip = `${umProjeto ? i.rot : i.p.nome} · ${sig(i.k)} ${etapa(i.k).nome}${e === "atual" ? " (em andamento)" : e === "futura" ? " (prevista)" : e === "atrasada" ? " (prazo vencido)" : e === "feita" && umProjeto ? " (postado)" : " (concluída)"}`; // sem datas
     const tag = umProjeto ? "div" : "a";
-    const fora = (umProjeto ? i.rot : i.p.nome).length * 7.4 + 112 > w; // texto não cabe na barra: vai logo depois dela
+    const fora = (umProjeto ? i.rot : i.p.nome).length * 7.4 + 56 > w; // texto não cabe na barra: vai logo depois dela
     const xt = fora ? x(i.inicio) + w + 8 : x(i.inicio) + 10;
-    return `<${tag} class="gn-row"${umProjeto ? "" : ` href="#${slug(i.p)}/indicadores"`} data-tip="${esc(tip)}"><i class="gn-b ${e}" style="left:${x(i.inicio)}px;width:${w}px"></i><span class="gn-txt ${e}${fora ? " fora" : ""}${umProjeto && !i.feita && i.rot.startsWith("Projeto") ? " proj" : ""}" data-x="${xt}" data-fim="${fora ? xt : x(i.inicio) + w}" style="left:${xt}px"><b>${nome}</b><em style="--c:${etapa(i.k).cor}">${sig(i.k)}</em><span>${e === "futura" ? "previsto até" : "até"} ${data(i.fim).slice(0, 5)}</span></span></${tag}>`;
+    return `<${tag} class="gn-row"${umProjeto ? "" : ` href="#${slug(i.p)}/indicadores"`} data-tip="${esc(tip)}"><i class="gn-b ${e}" style="left:${x(i.inicio)}px;width:${w}px"></i><span class="gn-txt ${e}${fora ? " fora" : ""}${umProjeto && !i.feita && i.rot.startsWith("Projeto") ? " proj" : ""}" data-x="${xt}" data-fim="${fora ? xt : x(i.inicio) + w}" style="left:${xt}px"><b>${nome}</b><em style="--c:${etapa(i.k).cor}">${sig(i.k)}</em></span></${tag}>`; // sem datas no rótulo: o período aparece só na régua
   }).join("") || '<p class="vazio">Nenhuma etapa em andamento ou prevista para esse filtro.</p>';
   const anas = ANAS.filter((a) => projs.some((p) => p.analista === a.id));
   return `<div class="gantt">
@@ -1350,15 +1753,21 @@ function montarMenu() {
   $("#chips").innerHTML = [["all", "Todas"], ...FLUXO.map((k) => [k, sig(k)])].map(([k, t]) => `<button data-f="${k}" aria-pressed="${filtro === k}" ${k !== "all" ? `title="${ETAPAS[k].nome}"` : ""}>${k !== "all" ? `<i style="background:${ETAPAS[k].cor}"></i>` : ""}${t}</button>`).join("");
   const r = rota(), lista = base().filter(visivel);
   if (r.p) abertas.add(r.p.analista); if (r.a) abertas.add(r.a.id); if (quem() && quem() !== "todos" && !montarMenu.feito) { abertas.add(quem()); montarMenu.feito = true; } if (acesso !== "gestao") abertas.add(acesso);
-  const item = (p) => `<li><a href="#${slug(p)}" data-r="${slug(p)}"><span class="nm"><span>${esc(rotulo(p).join(" · "))}</span><small>${[subProj(p, false), esc(etapa(p.etapa).nome)].filter(Boolean).join(" · ")}</small></span><em class="tag" style="background:${etapa(p.etapa).cor}">${esc(sig(norm(p.etapa)) || "—")}</em></a></li>`;
+  const item = (p) => `<li><a href="#${slug(p)}" data-r="${slug(p)}"><span class="nm"><span class="pn">${esc(rotulo(p).join(" · "))}</span><small>${[subProj(p, false), esc(etapa(p.etapa).nome)].filter(Boolean).join(" · ")}</small></span><em class="tag" style="background:${etapa(p.etapa).cor}">${esc(sig(norm(p.etapa)) || "—")}</em></a></li>`;
   const ids = [...new Set(base().map((p) => p.analista))];
-  const pastas = !COM_ANA ? lista.map(item).join("") : ANAS.filter((a) => ids.includes(a.id)).map((a) => {
+  const pastas = !COM_ANA ? lista.filter((p) => !CFG.abaLegal || !ehLegal(p)).map(item).join("") : ANAS.filter((a) => ids.includes(a.id)).map((a) => {
     const ps = lista.filter((p) => p.analista === a.id); if (!ps.length) return "";
     const aberta = abertas.has(a.id) || !!busca;
     return `<li class="pasta${aberta ? " aberta" : ""}"><div class="pasta-h"><a href="#a-${a.id}" data-r="a-${a.id}">${icoPasta}<span class="nm"><span>${esc(a.nome)}</span></span><em class="cont num">${ps.length}</em></a><button data-pasta="${a.id}" aria-expanded="${aberta}" aria-label="${aberta ? "Fechar" : "Abrir"} a pasta de ${esc(a.nome)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>${aberta ? `<ul class="sub">${ps.map(item).join("")}</ul>` : ""}</li>`;
   }).join("");
   $("#nav").innerHTML = `<ul class="abas">${ABAS.map(([id, t, i]) => `<li><a class="aba" href="#${id}" data-aba="${id}">${i}<span class="nm"><span>${t}</span></span></a></li>`).join("")}</ul><div class="sep-abas"></div>
-<h3><span>${!COM_ANA ? "Projetos" : acesso === "gestao" ? "Analistas" : "Meus projetos"}</span><span class="num">${lista.length} projeto${lista.length === 1 ? "" : "s"}</span></h3><ul>${pastas || '<li class="empty">Nenhum projeto encontrado.</li>'}</ul>
+${(() => {
+  const nPl = (n) => `${n} projeto${n === 1 ? "" : "s"}`;
+  if (!CFG.abaLegal || COM_ANA) return `<h3><span>${!COM_ANA ? "Projetos" : acesso === "gestao" ? "Analistas" : "Meus projetos"}</span><span class="num">${nPl(lista.length)}</span></h3><ul>${pastas || '<li class="empty">Nenhum projeto encontrado.</li>'}</ul>`;
+  const lc = lista.filter((p) => !ehLegal(p)), ll = lista.filter(ehLegal);
+  return `<h3><a href="#coordenacao" class="h3a">Coordenação</a><span class="num">${nPl(lc.length)}</span></h3><ul>${pastas || '<li class="empty">Nenhum projeto encontrado.</li>'}</ul>
+<h3><a href="#legalizacao" class="h3a">Legalização</a><span class="num">${nPl(ll.length)}</span></h3><ul>${ll.map(item).join("") || '<li class="empty">Nenhum projeto encontrado.</li>'}</ul>`;
+})()}
 <h3><span>EXP BR</span></h3><ul><li><a href="#sobre" data-r="sobre">${icoSobre}<span class="nm"><span>Sobre a EXP</span></span></a></li></ul>`;
   marcarAtual();
 }
@@ -1374,23 +1783,24 @@ function rota() {
   const sub = SUBABAS.some(([id]) => id && id === subRaw) ? subRaw : "";
   if (h === "sobre") return { id: "sobre", sec: "" };
   if (h === "visao-geral") return { id: "coordenacao", sec: "coordenacao" }; // links antigos
-  if (ABAS.some(([id]) => id === h)) return { id: h, sec: h };
+  if (ABAS.some(([id]) => id === h)) return { id: h, sec: h, sub: subRaw || "" };
   if (h.startsWith("a-")) { const a = ANAS.find((x) => "a-" + x.id === h); if (a) return { id: h, a, sub, sec: sub || "coordenacao" }; }
   const p = base().find((x) => slug(x) === h);
-  if (p) return { id: h, p, sub, sec: sub || "coordenacao" };
+  if (p) return { id: h, p, sub, sec: sub || grupoProj(p) };
   return { id: "inicio", sec: "inicio" };
 }
 let rotaAnterior = "";
 function render(manterScroll = false) {
   if (!DADOS) return;
   const r = rota();
+  if (r.id === "legalizacao" && filtro !== "all") { filtro = "all"; montarMenu(); } // Legalização sempre abre sem filtro de etapa
   const el = $("#conteudo");
   const sa = SUBABAS.find(([id]) => id === (r.sub || "")), aba = ABAS.find(([id]) => id === r.id);
-  el.innerHTML = r.p ? sa[4](r.p) : r.a ? sa[3](r.a) : r.id === "sobre" ? pgSobre() : (aba || ABAS[0])[3]();
+  el.innerHTML = r.p ? sa[4](r.p) : r.a ? sa[3](r.a) : r.id === "sobre" ? pgSobre() : (aba || ABAS[0])[3](r);
   $$(".gn-scroll").forEach(focoHoje);
   $("#decoX").hidden = r.id !== "inicio"; posicionarX();
-  $("#abasM").innerHTML = ABAS.map(([id, t, i]) => `<a href="#${id}"${r.sec === id ? ' aria-current="page"' : ""}>${i}<span>${t}</span></a>`).join("");
-  const titulo = r.p ? rotulo(r.p).join(" · ") : r.a ? r.a.nome : { sobre: "Sobre a EXP", coordenacao: "Coordenação", indicadores: "Indicadores" }[r.id] || "Início";
+  $("#abasM").innerHTML = [...ABAS, ["sobre", "Sobre a EXP", icoSobre]].map(([id, t, i]) => `<a href="#${id}"${(r.sec || r.id) === id ? ' aria-current="page"' : ""} aria-label="${t}">${i}<span>${t}</span></a>`).join(""); // celular: Sobre a EXP junto das outras abas
+  const titulo = r.p ? rotulo(r.p).join(" · ") : r.a ? r.a.nome : { sobre: "Sobre a EXP", coordenacao: "Coordenação", legalizacao: "Legalização", indicadores: "Indicadores" }[r.id] || "Início";
   document.title = `${titulo} · ${CFG.titulo}`;
   $("#mtitulo").textContent = titulo;
   if (!manterScroll && rotaAnterior !== location.hash) window.scrollTo({ top: 0 });
@@ -1406,16 +1816,46 @@ document.addEventListener("change", (e) => { if (e.target.id === "verComo") { ac
 
 // Filtros (barra lateral e blocos de etapa na visão geral usam o mesmo estado)
 const comFiltro = (r) => !r.p && !["sobre", "inicio"].includes(r.id);
+// Abre o comprovante com link recém-pedido ao Notion (arquivos do Notion têm link que vale 1 hora)
+async function abrirComprovante(id) {
+  const atual = () => { const p = base().find((x) => slug(x) === id); const l = p && legInc(p); return l && l.comprovante; };
+  if (DADOS.fonte === "exemplo") { alert("Na prévia com dados de exemplo não há arquivo. No site ligado ao Notion, abre o PDF anexado."); return; }
+  const w = window.open("", "_blank"); // abre já no clique para o navegador não bloquear
+  try { const r = await fetch("/api/dados", { cache: "no-store" }); if (r.ok) { const j = await r.json(); if (j.projetos) aplicar(j); } } catch (e) {}
+  const u = atual();
+  if (u && w) w.location = u; else { if (w) w.close(); alert("Comprovante indisponível no momento. Fale com a equipe da EXP."); }
+}
 function setFiltro(f) { filtro = filtro === f && f !== "all" ? "all" : f; const r = rota(); if (comFiltro(r)) render(true); else montarMenu(); }
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-f]");
   if (b) { setFiltro(b.dataset.f); return; }
+  const bc = e.target.closest("[data-comp]");
+  if (bc) { abrirComprovante(bc.dataset.comp); return; }
+  const bl = e.target.closest("[data-fl]");
+  if (bl) { filtroLeg = filtroLeg === bl.dataset.fl ? "all" : bl.dataset.fl; render(true); return; }
   const pz = e.target.closest("[data-pasta]");
   if (pz) { const id = pz.dataset.pasta; abertas.has(id) ? abertas.delete(id) : abertas.add(id); montarMenu(); return; }
-  if (e.target.id === "limpar") { e.preventDefault(); filtro = "all"; busca = ""; $("#q").value = ""; montarMenu(); render(true); }
+  if (e.target.id === "limpar") { e.preventDefault(); filtro = "all"; filtroLeg = "all"; busca = ""; $("#q").value = ""; if ($("#qm")) $("#qm").value = ""; montarMenu(); render(true); }
 });
 $("#q").addEventListener("input", (e) => { busca = norm(e.target.value); const r = rota(); if (comFiltro(r)) render(true); else montarMenu(); });
-$("#menuBtn").onclick = () => $("#app").classList.add("aberto");
+// Celular: a lupa abre a busca da página atual (Coordenação busca só projetos de coordenação; Legalização, só os de legalização)
+const LUGAR_BUSCA = { coordenacao: "em Coordenação", legalizacao: "em Legalização", indicadores: "nos Indicadores" };
+function buscaMobile() {
+  const r = rota(), q = $("#qm").value.trim(), lista = $("#buscaRes");
+  $("#qm").placeholder = `Buscar projeto ${LUGAR_BUSCA[r.id] || ""}…`.replace(" …", "…");
+  busca = norm(q); if ($("#q")) $("#q").value = q;
+  if (comFiltro(r)) { lista.innerHTML = ""; render(true); return; } // páginas com lista: filtra a própria lista
+  // Início, Sobre e páginas de projeto: mostra os projetos encontrados logo abaixo
+  if (!busca) { lista.innerHTML = ""; return; }
+  const ps = base().filter(visivel).slice(0, 8);
+  lista.innerHTML = ps.length ? ps.map((p) => `<a href="#${slug(p)}" data-fechabusca><b>${esc(p.nome)}</b><small>${nomeGrupo(p)} · ${esc(etapa(p.etapa).nome)}</small></a>`).join("") : '<p class="vazio">Nenhum projeto encontrado.</p>';
+}
+function fecharBusca() { $("#buscaM").hidden = true; $("#buscaBtn").setAttribute("aria-expanded", "false"); $("#qm").value = ""; $("#buscaRes").innerHTML = ""; if (busca) { busca = ""; if ($("#q")) $("#q").value = ""; render(true); } }
+$("#buscaBtn").onclick = () => { const m = $("#buscaM"); if (!m.hidden) { fecharBusca(); return; } m.hidden = false; $("#buscaBtn").setAttribute("aria-expanded", "true"); buscaMobile(); $("#qm").focus(); };
+$("#qm").addEventListener("input", buscaMobile);
+$("#buscaFechar").onclick = fecharBusca;
+$("#buscaRes").addEventListener("click", (e) => { if (e.target.closest("[data-fechabusca]")) setTimeout(fecharBusca, 0); });
+addEventListener("hashchange", () => { if (!$("#buscaM").hidden) { if (!comFiltro(rota())) $("#buscaRes").innerHTML = ""; $("#qm").placeholder = `Buscar projeto ${LUGAR_BUSCA[rota().id] || ""}…`.replace(" …", "…"); } });
 $("#scrim").onclick = () => $("#app").classList.remove("aberto");
 addEventListener("keydown", (e) => { if (e.key === "Escape") $("#app").classList.remove("aberto"); });
 
@@ -1427,10 +1867,15 @@ function marcarFonte(tipo, texto, dica) {
 let ultimo = "";
 function aplicar(d) {
   montarAssistente();
+  const et = (e) => { const k = norm(e); return ETAPA_ALIAS[k] || e; };
+  (d.projetos || []).forEach((p) => { p.etapa = et(p.etapa); p.disciplinas.forEach((x) => (x.etapa = et(x.etapa))); (p.cronograma || []).forEach((c) => (c.etapa = et(c.etapa))); });
   DADOS = d; PROJS = ordenarProj(d.projetos || []);
   ANAS = COM_ANA ? [...(d.analistas || [])].sort((a, b) => a.nome.localeCompare(b.nome)) : [];
-  GRUPOS_LEGAL = TODOS_LEGAL.filter(([, , s], i) => i < 2 || PROJS.some((p) => p.legal.some((l) => s.includes(norm(l.sigla)))));
-  GRUPOS_GRAF_LEGAL = GRUPOS_LEGAL.map(([nome, , s]) => [nome, s[0], s]);
+  GRUPOS_LEGAL = CFG.legal ? TODOS_LEGAL.filter(([, , s]) => CFG.legal.includes(s[0])) // tipos de legalização do cliente (ex.: Tenda só Incêndio)
+    : TODOS_LEGAL.filter(([, , s], i) => i < 2 || PROJS.some((p) => p.legal.some((l) => s.includes(norm(l.sigla)))));
+  const coord = PROJS.filter((p) => !ehLegal(p)); // v3: tipos de legalização da Coordenação (Infraestrutura só se algum projeto tiver)
+  GRUPOS_LEGAL_COORD = CFG.legalCoord ? TODOS_LEGAL.filter(([, , s]) => CFG.legalCoord.includes(s[0])) // Tenda: só Incêndio, também nos projetos com várias disciplinas
+    : TODOS_LEGAL.filter(([, , s], i) => i < 2 || coord.some((p) => p.legal.some((l) => s.includes(norm(l.sigla)))));
   render(true);
 }
 async function carregar() {
@@ -1440,7 +1885,7 @@ async function carregar() {
     if (!r.ok || j.erro) throw new Error(j.erro || "HTTP " + r.status);
     marcarFonte("vivo", "Conectado ao Notion", "Os dados são lidos do Notion e atualizados a cada poucos minutos.");
     const txt = JSON.stringify([j.projetos, j.opcoesPendencias]);
-    if (txt !== ultimo) { ultimo = txt; aplicar(j); } else if (["coordenacao", "inicio", "indicadores"].includes(rota().id)) { DADOS.atualizado = j.atualizado; render(true); }
+    if (txt !== ultimo) { ultimo = txt; aplicar(j); } else if (["coordenacao", "legalizacao", "inicio", "indicadores"].includes(rota().id)) { DADOS.atualizado = j.atualizado; render(true); }
   } catch (e) {
     if (!DADOS || DADOS.fonte === "exemplo") {
       marcarFonte("exemplo", "Dados de exemplo", "Sem conexão com o Notion: " + e.message);

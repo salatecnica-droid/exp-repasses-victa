@@ -22,9 +22,15 @@ const COLUNAS = {
   legalPrazo: "Prazo",
   legalRetorno: "Previsão de retorno",
   legalDisciplina: "Disciplina",
+  // dados do processo legal atual (cartões de legalização)
+  legalProtocolo: "Protocolo atual geral",
+  legalRetornoGeral: "Prazo de retorno geral",
+  legalAprovacao: "Data aprovação geral",
+  legalComprovante: "Comprovante", // opcional: arquivo ou link (só comprovante de protocolo/aprovação)
+  // Nunca vão para o site (confidenciais/internos): "Nº Processo atual", "CNPJ", "O que fazer? (resumo)", "Notas"
   // Linha do tempo (Gantt): início e fim de cada projeto/disciplina
-  inicio: "Data de início adotada",
-  fim: "Data de entrega",
+  inicio: "Data de inicio adotada", // fórmula: Sprint Date ou, se vazia, Data Ideal Inicio (Próxima Entrega menos os dias da etapa)
+  fim: "Próxima Entrega",
   // (opcional) linha de produto do empreendimento: Vitória, Viver, Vista, Diagonal INC…
   linha: "Linha de produto",
 };
@@ -154,6 +160,11 @@ function isoDe(v) {
   const t = String(v ?? "").trim(); let m;
   if ((m = t.match(/^(\d{4})-(\d{2})-(\d{2})/))) return `${m[1]}-${m[2]}-${m[3]}`;
   if ((m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  // Fórmula que devolve texto: "September 1, 2026", "Sep 1, 2026" ou "1 de setembro de 2026"
+  const MES = { jan: 1, fev: 2, feb: 2, mar: 3, abr: 4, apr: 4, mai: 5, may: 5, jun: 6, jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12 };
+  const n2 = (x) => String(x).padStart(2, "0"), mes = (x) => MES[semAcento(x).slice(0, 3)];
+  if ((m = t.match(/^([A-Za-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})/)) && mes(m[1])) return `${m[3]}-${n2(mes(m[1]))}-${n2(m[2])}`;
+  if ((m = t.match(/^(\d{1,2})\s+de\s+([A-Za-zÀ-ú]+)\.?\s+de\s+(\d{4})/i)) && mes(m[2])) return `${m[3]}-${n2(mes(m[2]))}-${n2(m[1])}`;
   return null;
 }
 // Período da linha: início pela "Data de início adotada", fim pela "Data de entrega" (ou o fim do próprio intervalo de início)
@@ -177,6 +188,20 @@ function checklistDe(pg) {
   }
   return itens;
 }
+
+// Comprovante: arquivo (link do Notion, vale 1 hora) ou link externo; devolve o primeiro
+function comprovanteDe(p) {
+  if (!p) return null;
+  if (p.type === "files") { const f = p.files[0]; return f ? (f.file?.url || f.external?.url || null) : null; }
+  if (p.type === "url") return p.url || null;
+  if (p.type === "rollup" && p.rollup?.type === "array") { for (const x of p.rollup.array) { const u = comprovanteDe(x); if (u) return u; } }
+  return null;
+}
+// Sub-itens do cartão de legalização = protocolos criados pelo botão "Criar Protocolo"
+const subitensDe = (pg) => {
+  const k = Object.keys(pg.properties).find((n) => pg.properties[n].type === "relation" && /^sub.?ite/i.test(semAcento(n)));
+  return k ? pg.properties[k].relation.map((r) => r.id) : [];
+};
 
 // Monta um filtro de "diferente de" / "não vazio" respeitando o tipo da coluna
 function filtroTexto(esquema, nome, cond) {
@@ -235,10 +260,32 @@ export default async () => {
       else avisos.push(`Coluna de analista não encontrada. Colunas da base: ${Object.keys(props).join(", ")}`);
     }
     const cIni = colunaDe(props, COLUNAS.inicio, /INICIO ADOTAD/i, /DATA DE INICIO/i, /^INICIO/i);
-    const cFim = colunaDe(props, COLUNAS.fim, /^DATA DE ENTREGA/i, /^DATA (DE )?FIM/i, /^ENTREGA/i);
+    const cFim = colunaDe(props, COLUNAS.fim, /^PROXIMA ENTREGA/i, /^DATA FINAL ADOTADA/i, /^DATA DE ENTREGA/i, /^DATA (DE )?FIM/i);
     const cLinha = colunaDe(props, COLUNAS.linha, /LINHA/i);
     if (!cIni || !cFim) avisos.push(`Coluna "${!cIni ? COLUNAS.inicio : COLUNAS.fim}" não encontrada: o cronograma (Gantt) fica sem essas datas. Colunas com data na base: ${Object.keys(props).filter((n) => /DATA|INICIO|ENTREGA|PRAZO/i.test(semAcento(n))).join(", ")}`);
     const ehCoor = (pg) => String(prop(pg, COLUNAS.disciplina) || "").toUpperCase() === "COOR";
+    // Colunas do processo legal atual (aceita pequenas diferenças de nome)
+    const cProt = colunaDe(props, COLUNAS.legalProtocolo, /^PROTOCOLO ATUAL/i, /^DATA (DO )?PROTOCOLO/i);
+    const cRetG = colunaDe(props, COLUNAS.legalRetornoGeral, /^PRAZO DE RETORNO/i);
+    const cAprov = colunaDe(props, COLUNAS.legalAprovacao, /^DATA (DE )?APROVACAO/i);
+    const cComp = colunaDe(props, COLUNAS.legalComprovante, /^COMPROVANTE/i);
+    const legalDaLinha = (pg, sigla) => {
+      const subs = subitensDe(pg), protocolo = cProt ? isoDe(prop(pg, cProt)) : null;
+      return {
+        sigla,
+        status: texto(prop(pg, COLUNAS.legalStatus)),
+        prazo: texto(prop(pg, COLUNAS.legalPrazo)),
+        retorno: (cRetG && isoDe(prop(pg, cRetG))) || isoDe(prop(pg, COLUNAS.legalRetorno)) || texto(prop(pg, COLUNAS.legalRetorno)),
+        protocolo,
+        aprovacao: cAprov ? isoDe(prop(pg, cAprov)) : null,
+        protocolos: subs.length || (protocolo ? 1 : 0), // quantos protocolos já foram feitos
+        comprovante: cComp ? comprovanteDe(pg.properties[cComp]) : null,
+      };
+    };
+    // Protocolos (sub-itens dos cartões de legalização) não são disciplinas: ficam fora da lista
+    const naoCoor = new Set(linhas.filter((x) => !ehCoor(x)).map((x) => x.id));
+    const ehProtocolo = (pg) => !ehCoor(pg) && Object.entries(pg.properties).some(([k, p]) => p.type === "relation" && /^(parent|item principal|item pai)/i.test(semAcento(k)) && p.relation.some((r) => naoCoor.has(r.id)));
+    if (cIni && cFim) avisos.push(`Cronograma: ${linhas.filter((pg) => periodo(pg, cIni, cFim)).length} de ${linhas.length} cartões têm "${cIni}" e "${cFim}" preenchidas.`);
     const projetos = new Map();
     for (const pg of linhas.filter(ehCoor)) {
       const t = titulo(pg);
@@ -277,7 +324,7 @@ export default async () => {
       }
       return porCodigo.get(codigoDe(titulo(pg)));
     };
-    for (const pg of linhas.filter((x) => !ehCoor(x))) {
+    for (const pg of linhas.filter((x) => !ehCoor(x) && !ehProtocolo(x))) {
       const dono = donoDe(pg);
       if (!dono) { avisos.push(`Disciplina sem projeto: ${titulo(pg)}`); continue; }
       const sigla = texto(prop(pg, COLUNAS.disciplina));
@@ -291,7 +338,7 @@ export default async () => {
       // Mesma base: Incêndio, Elétrico, SBE e Infraestrutura trazem a legalização na própria linha
       const statusLegal = mesmaBase ? texto(prop(pg, COLUNAS.legalStatus)) : null;
       if (statusLegal && LEGAL_SIGLAS.includes(String(sigla).toUpperCase())) {
-        dono.legal.push({ sigla, status: statusLegal, prazo: texto(prop(pg, COLUNAS.legalPrazo)), retorno: texto(prop(pg, COLUNAS.legalRetorno)) });
+        dono.legal.push(legalDaLinha(pg, sigla));
       }
     }
 
